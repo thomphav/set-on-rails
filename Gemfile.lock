@@ -77,9 +77,6 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.6)
       public_suffix (>= 2.0.2, < 6.0)
-    annotate (3.2.0)
-      activerecord (>= 3.2, < 8.0)
-      rake (>= 10.4, < 14.0)
     babel-source (5.8.35)
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
@@ -261,7 +258,6 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  annotate (~> 3.2)
   bootsnap
   capybara
   debug

@@ -1,7 +1,9 @@
 import React from "react";
 import mount from "../mount";
-import Product from "../Product"
+import Home from "../home";
+import Game from "../game";
 
 mount({
-  Product,
+  Home,
+  Game,
 });

@@ -69,5 +69,3 @@ end
 gem "react-rails", "~> 3.2"
 
 gem "view_component", "~> 3.10"
-
-gem "annotate", "~> 3.2"

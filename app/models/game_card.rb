@@ -1,4 +1,18 @@
+# == Schema Information
+#
+# Table name: game_cards
+#
+#  id         :bigint           not null, primary key
+#  position   :integer          not null
+#  state      :integer          default(0), not null
+#  game_id    :bigint           not null
+#  card_id    :bigint           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
 class GameCard < ApplicationRecord
   belongs_to :game
   belongs_to :card
+
+  enum state: [:in_deck, :drawn, :used]
 end

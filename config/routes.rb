@@ -8,4 +8,12 @@ Rails.application.routes.draw do
 
   resources :home, only: [:index]
   resources :games, only: [:create, :show]
+
+  namespace :internal_api do
+    resources :games do
+      collection do
+        post :check_for_set
+      end
+    end
+  end
 end

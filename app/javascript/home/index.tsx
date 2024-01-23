@@ -5,10 +5,10 @@ const Home = () => {
 
   return (
     <>
-      <form action="/games" method="post">
+      <form className="flex flex-col justify-center w-full border border-green" action="/games" method="post">
         <h1>Let's play set!</h1>
         <CsrfInput />
-        <button type="submit">Play</button>
+        <button className="border w-auto" type="submit">Play</button>
       </form>
     </>
   );

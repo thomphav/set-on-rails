@@ -1,0 +1,2 @@
+module InternalApi::GamesHelper
+end

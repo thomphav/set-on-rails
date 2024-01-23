@@ -13,10 +13,12 @@ class GamesController < ApplicationController
       shuffled_cards = Card.all.shuffle
 
       shuffled_cards.each_with_index do |card, index|
-        game.game_cards.create!(
+        c = game.game_cards.create!(
           card: card,
           position: index
         )
+
+        c.update!(state: :drawn) if index < 12
       end
     end
 
@@ -29,6 +31,7 @@ class GamesController < ApplicationController
   def show
     game = Game.find(params[:id])
 
+    @game_id = game.id
     @game_cards = game.draw_cards
   rescue StandardError => e
     Rails.logger.error(e)

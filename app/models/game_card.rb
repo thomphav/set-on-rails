@@ -15,4 +15,9 @@ class GameCard < ApplicationRecord
   belongs_to :card
 
   enum state: [:in_deck, :drawn, :used]
+
+  delegate :color, to: :card
+  delegate :symbol, to: :card
+  delegate :shading, to: :card
+  delegate :number, to: :card
 end

@@ -10,6 +10,7 @@ interface gameCard {
 
 const Game = ({ gameId, gameCards }: { gameId: number, gameCards: gameCard[]}) => {
   const [selected, setSelected] = useState<number[]>([]);
+  const [cards, setCards] = useState<gameCard[]>(gameCards)
 
   const handleSelect = (id: number) => {
     if (selected.find((sid) => sid === id)) {
@@ -43,9 +44,23 @@ const Game = ({ gameId, gameCards }: { gameId: number, gameCards: gameCard[]}) =
 
       const data = await response.json();
 
-      console.log(data)
+      if (data.result) {
+        const cardsDup = cards.slice()
+        const selectedDup = selected.slice();
+        const newCards = data.three_cards.slice();
 
-      if (!data.result) setSelected([])
+        selectedDup.forEach(selectedId => {
+          const cardIndex = cardsDup.findIndex(card => card.id === selectedId);
+          if (cardIndex !== -1) {
+              const newCard = newCards.pop()
+              cardsDup[cardIndex] = newCard;
+          }
+        });
+
+        setCards(cardsDup)
+      }
+
+      setSelected([])
     } catch (error) {
       console.error(error)
     }
@@ -93,7 +108,7 @@ const Game = ({ gameId, gameCards }: { gameId: number, gameCards: gameCard[]}) =
             </mask>
           </defs>
         </svg>
-        {gameCards.map((gameCard: gameCard) => (
+        {cards.map((gameCard: gameCard) => (
           <button
             key={gameCard.id}
             onClick={() => handleSelect(gameCard.id)}

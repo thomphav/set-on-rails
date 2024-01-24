@@ -32,7 +32,7 @@ class GamesController < ApplicationController
     game = Game.find(params[:id])
 
     @game_id = game.id
-    @game_cards = game.draw_cards
+    @game_cards, _ = game.draw_cards
   rescue StandardError => e
     Rails.logger.error(e)
     render plain: "error", status: :unprocessable_entity

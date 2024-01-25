@@ -9,12 +9,15 @@
 class Game < ApplicationRecord
   has_many :game_cards, -> { order(position: :asc) }, dependent: :destroy
 
-  def draw_cards
+  def draw_cards(old_cards: [])
     result = true
     candidate_cards = nil
 
     three_cards = game_cards.in_deck.first(3)
-    three_cards.each { |gc| gc.update!(state: :drawn) } if game_cards.drawn.count < 12
+
+    last_legs = three_cards.empty?
+
+    three_cards.each { |gc| gc.update!(state: :drawn, position: old_cards.pop&.position) } if game_cards.drawn.count < 12
     three_cards =
       GameCard
         .where(id: three_cards.map(&:id))
@@ -53,14 +56,23 @@ class Game < ApplicationRecord
               END as formatted_number"
           )
 
-      result = false if check_board_for_set(game_cards)
+      if check_board_for_set(candidate_cards)
+        result = false
+      else
+        three_cards = game_cards.in_deck.first(3)
+
+        last_legs = three_cards.empty?
+        break if last_legs
+
+        three_cards.each_with_index { |gc, index| gc.update!(state: :drawn, position: candidate_cards.length + index) }
+      end
     end
 
-    [candidate_cards, three_cards]
+    [candidate_cards, three_cards, last_legs]
   end
 
-  def check_board_for_set(game_cards)
-    game_cards.to_a.combination(3).any? do |gcs|
+  def check_board_for_set(drawn_gcs)
+    drawn_gcs.to_a.combination(3).any? do |gcs|
       check_three_for_set(gcs)
     end
   end

@@ -3,8 +3,8 @@
 # Table name: game_cards
 #
 #  id         :bigint           not null, primary key
-#  position   :integer          not null
-#  state      :integer          default(0), not null
+#  position   :integer
+#  state      :integer          default("in_deck"), not null
 #  game_id    :bigint           not null
 #  card_id    :bigint           not null
 #  created_at :datetime         not null

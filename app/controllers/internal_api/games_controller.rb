@@ -5,22 +5,16 @@ class InternalApi::GamesController < ApplicationController
 
     result = game.check_three_for_set(game_cards)
 
-    new_cards, three_cards =
+    new_cards, three_cards, last_legs =
       if result
         game_cards.each { |gc| gc.update!(state: :used) }
-        game.draw_cards
+        game.draw_cards(old_cards: game_cards.to_a)
       else
         [[], []]
       end
 
-    render json: { result: result, new_cards: new_cards, three_cards: three_cards }, status: :ok
+    render json: { result: result, new_cards: new_cards, three_cards: three_cards, game_over: last_legs }, status: :ok
   rescue StandardError => e
     render json: { error: e }, status: :unprocessable_entity
   end
-
-  private
-
-  # def check_for_set_params
-  #   params.permit(:game_id, :game, ids: [])
-  # end
 end

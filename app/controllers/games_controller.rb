@@ -14,11 +14,10 @@ class GamesController < ApplicationController
 
       shuffled_cards.each_with_index do |card, index|
         c = game.game_cards.create!(
-          card: card,
-          position: index
+          card: card
         )
 
-        c.update!(state: :drawn) if index < 12
+        c.update!(state: :drawn, position: index) if index < 12
       end
     end
 
@@ -32,7 +31,9 @@ class GamesController < ApplicationController
     game = Game.find(params[:id])
 
     @game_id = game.id
-    @game_cards, _ = game.draw_cards
+    @game_cards, _, @game_over = game.draw_cards
+    puts "gameCards: #{@game_cards}"
+    puts "gameOver: #{@game_over}"
   rescue StandardError => e
     Rails.logger.error(e)
     render plain: "error", status: :unprocessable_entity

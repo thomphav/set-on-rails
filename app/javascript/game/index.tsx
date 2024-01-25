@@ -8,9 +8,10 @@ interface gameCard {
   formatted_number: number
 }
 
-const Game = ({ gameId, gameCards }: { gameId: number, gameCards: gameCard[]}) => {
+const Game = ({ gameId, gameCards, initialGameOver }: { gameId: number, gameCards: gameCard[], initialGameOver: boolean}) => {
   const [selected, setSelected] = useState<number[]>([]);
   const [cards, setCards] = useState<gameCard[]>(gameCards)
+  const [gameOver, setGameOver] = useState<boolean>(initialGameOver)
 
   const handleSelect = (id: number) => {
     if (selected.find((sid) => sid === id)) {
@@ -44,21 +45,8 @@ const Game = ({ gameId, gameCards }: { gameId: number, gameCards: gameCard[]}) =
 
       const data = await response.json();
 
-      if (data.result) {
-        const cardsDup = cards.slice()
-        const selectedDup = selected.slice();
-        const newCards = data.three_cards.slice();
-
-        selectedDup.forEach(selectedId => {
-          const cardIndex = cardsDup.findIndex(card => card.id === selectedId);
-          if (cardIndex !== -1) {
-              const newCard = newCards.pop()
-              cardsDup[cardIndex] = newCard;
-          }
-        });
-
-        setCards(cardsDup)
-      }
+      if (data.game_over) setGameOver(true)
+      if (data.result) setCards(data.new_cards)
 
       setSelected([])
     } catch (error) {
@@ -73,8 +61,9 @@ const Game = ({ gameId, gameCards }: { gameId: number, gameCards: gameCard[]}) =
   }, [selected]);
 
   return (
-    <div className="flex w-full">
-      <div className="mx-auto my-32 grid grid-cols-3 gap-4">
+    <div className="flex flex-col w-full py-32 space-y-8">
+      {gameOver && <h2 className="mx-auto text-3xl">Game Over</h2>}
+      <div className="mx-auto grid grid-cols-3 gap-4">
         <svg className="hidden" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <path

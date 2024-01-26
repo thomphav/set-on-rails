@@ -5,6 +5,8 @@
 #  id         :bigint           not null, primary key
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  start_time :datetime
+#  end_time   :datetime
 #
 
 # This model initially had no columns defined. If you add columns to the

@@ -5,6 +5,8 @@
 #  id         :bigint           not null, primary key
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  start_time :datetime
+#  end_time   :datetime
 #
 class Game < ApplicationRecord
   has_many :game_cards, -> { order(position: :asc) }, dependent: :destroy

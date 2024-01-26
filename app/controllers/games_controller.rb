@@ -30,10 +30,11 @@ class GamesController < ApplicationController
   def show
     game = Game.find(params[:id])
 
-    @game_id = game.id
+    @game = game
+              .attributes
+              .except("created_at", "updated_at")
+              .merge(start_time: (game.start_time&.to_i || 0) * 1000, end_time: (game.end_time&.to_i || 0) * 1000)
     @game_cards, _, @game_over = game.draw_cards
-    puts "gameCards: #{@game_cards}"
-    puts "gameOver: #{@game_over}"
   rescue StandardError => e
     Rails.logger.error(e)
     render plain: "error", status: :unprocessable_entity

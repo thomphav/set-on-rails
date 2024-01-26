@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   resources :games, only: [:create, :show]
 
   namespace :internal_api do
-    resources :games, only: [:index] do
+    resources :games, only: [:update] do
       collection do
         post :check_for_set
       end

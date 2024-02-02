@@ -4,13 +4,13 @@ import { CsrfInput } from "../components/shared/csrf_input";
 const Home = () => {
 
   return (
-    <>
-      <form className="flex flex-col justify-center w-full border border-green" action="/games" method="post">
-        <h1>Let's play set!</h1>
+    <div className="flex w-full h-screen items-center">
+      <form className="flex flex-col justify-center items-center mx-auto space-y-16" action="/games" method="post">
+        <h1 className="text-6xl">Let's play set!</h1>
         <CsrfInput />
-        <button className="border w-auto" type="submit">Play</button>
+        <button className="border border-gray-800 py-4 px-20 w-fit text-3xl rounded-md hover:bg-gray-50" type="submit">Play</button>
       </form>
-    </>
+    </div>
   );
 };
 

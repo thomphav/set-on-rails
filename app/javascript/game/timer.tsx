@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { setCsrfToken } from './utils';
-import { game } from './types';
+import { game } from '../common_types/types';
 
 const Timer = ({ game, gameOver }: { game: game, gameOver: boolean }) => {
   const formatTimeFromCentiseconds = (centiseconds: number) => {

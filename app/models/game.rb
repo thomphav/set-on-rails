@@ -11,6 +11,24 @@
 class Game < ApplicationRecord
   has_many :game_cards, -> { order(position: :asc) }, dependent: :destroy
 
+  scope :active, -> { where.not(start_time: nil).where(end_time: nil) }
+  scope :finished, -> { where.not(start_time: nil).where.not(end_time: nil) }
+
+  def active?
+    start_time.present? && end_time.nil?
+  end
+
+  def finished?
+    start_time.present? && end_time.present?
+  end
+
+  def as_json(options = {})
+    super(options).merge({
+      start_time: start_time.to_i,
+      end_time: end_time.to_i
+    })
+  end
+
   def draw_cards(old_cards: [])
     result = true
     candidate_cards = nil

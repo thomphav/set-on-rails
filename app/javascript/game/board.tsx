@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { SvgDefs } from "./svg_defs";
 import { setCsrfToken } from "./utils";
-import { game, gameCard } from "./types";
+import { game, gameCard } from "../common_types/types";
 
 interface BoardProps {
   game: game;

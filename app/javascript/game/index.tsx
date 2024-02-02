@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Board from "./board";
 import Timer from "./timer";
-import { game, gameCard } from "./types";
+import { game, gameCard } from "../common_types/types";
 import { setCsrfToken } from './utils';
 
 interface GameProps {

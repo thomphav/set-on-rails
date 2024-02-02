@@ -20,6 +20,7 @@ class Game < ApplicationRecord
     last_legs = three_cards.empty?
 
     three_cards.each { |gc| gc.update!(state: :drawn, position: old_cards.pop&.position) } if game_cards.drawn.count < 12
+
     three_cards =
       GameCard
         .where(id: three_cards.map(&:id))
@@ -60,6 +61,7 @@ class Game < ApplicationRecord
 
       if check_board_for_set(candidate_cards)
         result = false
+        last_legs = false
       else
         three_cards = game_cards.in_deck.first(3)
 

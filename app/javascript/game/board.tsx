@@ -3,10 +3,17 @@ import { SvgDefs } from "./svg_defs";
 import { setCsrfToken } from "./utils";
 import { game, gameCard } from "./types";
 
-const Board = ({ game, gameCards, initialGameOver }: { game: game, gameCards: gameCard[], initialGameOver: boolean}) => {
+interface BoardProps {
+  game: game;
+  gameCards: gameCard[];
+  gameOver: boolean;
+  setGameOver: (gameOver: boolean) => void;
+  handleGameOver: (time: number) => void;
+}
+
+const Board = ({ game, gameCards, gameOver, setGameOver, handleGameOver }: BoardProps) => {
   const [selected, setSelected] = useState<number[]>([]);
   const [cards, setCards] = useState<gameCard[]>(gameCards)
-  const [gameOver, setGameOver] = useState<boolean>(initialGameOver)
 
   const handleSelect = (id: number) => {
     if (selected.find((sid) => sid === id)) {
@@ -32,7 +39,10 @@ const Board = ({ game, gameCards, initialGameOver }: { game: game, gameCards: ga
   
       const data = await response.json();
   
-      if (data.game_over) setGameOver(true)
+      if (data.game_over) {
+        setGameOver(true)
+        handleGameOver
+      }
       if (data.result) setCards(data.new_cards)
   
       setSelected([])
@@ -41,12 +51,23 @@ const Board = ({ game, gameCards, initialGameOver }: { game: game, gameCards: ga
     }
   };
 
-  const GameCard = ({ gameCard, handleSelect, selected }: { gameCard: gameCard, handleSelect: (id: number) => void, selected: number[] }) => (
+  interface GameCardProps {
+    gameCard: gameCard;
+    handleSelect: (id: number) => void;
+    selected: number[];
+    gameOver: boolean;
+  }
+
+  const GameCard = ({ gameCard, handleSelect, selected, gameOver }: GameCardProps) => (
     <button
       key={gameCard.id}
       onClick={() => handleSelect(gameCard.id)}
-      className={`flex justify-center items-center border-2 rounded-md w-[250px] h-[150px] hover:bg-gray-100
-                  ${selected.find((id) => id === gameCard.id) && "border-blue-500"}`}
+      disabled={gameOver}
+      className={
+                  `flex justify-center items-center border-2 rounded-md w-[250px] h-[150px]
+                  ${selected.find((id) => id === gameCard.id) && "border-blue-500"}
+                  ${!gameOver && "hover:bg-gray-100"}`
+                }
     >
       {Array.from({ length: gameCard.formatted_number }).map((_, index) => (
         <svg key={index} width="50" height="100" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 400">
@@ -73,7 +94,13 @@ const Board = ({ game, gameCards, initialGameOver }: { game: game, gameCards: ga
       {gameOver && <h2 className="mx-auto text-3xl">Game Over</h2>}
       <div className="mx-auto grid grid-cols-3 gap-4">
         {cards.map((gameCard: gameCard) => (
-          <GameCard key={gameCard.id} gameCard={gameCard} handleSelect={handleSelect} selected={selected} />
+          <GameCard
+            key={gameCard.id}
+            gameCard={gameCard}
+            handleSelect={handleSelect}
+            selected={selected}
+            gameOver={gameOver}
+          />
         ))}
       </div>
     </>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { setCsrfToken } from './utils';
 import { game } from './types';
 
-const Timer = ({ game }: { game: game }) => {
+const Timer = ({ game, gameOver }: { game: game, gameOver: boolean }) => {
   const formatTimeFromCentiseconds = (centiseconds: number) => {
     const totalSeconds = Math.floor(centiseconds / 100);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -16,6 +16,8 @@ const Timer = ({ game }: { game: game }) => {
   const [displayTime, setDisplayTime] = useState<string>(game.start_time ?  formatTimeFromCentiseconds(initialElapsedTime / 10) : "00:00");
 
   useEffect(() => {
+    if (gameOver) return;
+
     const interval = setInterval(() => {
       const now = Date.now();
       if (!idempotentStartTimeCheck) {
@@ -26,7 +28,7 @@ const Timer = ({ game }: { game: game }) => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [startTime, idempotentStartTimeCheck]);
+  }, [startTime, idempotentStartTimeCheck, gameOver]);
 
   const handleUpdateGameStartTime = async (now: number) => {
     const token = setCsrfToken();

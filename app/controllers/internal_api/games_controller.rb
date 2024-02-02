@@ -2,8 +2,12 @@ class InternalApi::GamesController < ApplicationController
   def update
     game = Game.find(games_params[:id])
 
-    start_time_seconds = games_params[:start_time] / 1000.to_f
-    game.update!(start_time: Time.at(start_time_seconds))
+    params.slice(:start_time, :end_time).each do |key, time_in_ms|
+      time_seconds = time_in_ms / 1000.to_f
+      params[key] = Time.at(time_seconds)
+    end
+
+    game.update!(games_params)
 
     render json: { start_time: game.start_time.to_i * 1000 }, status: :ok
   rescue StandardError => e

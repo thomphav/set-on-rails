@@ -1,4 +1,12 @@
 class InternalApi::GamesController < ApplicationController
+  def show
+    game = Game.find(params[:id])
+
+    render json: game, status: :ok
+  rescue StandardError => e
+    render json: { error: e }, status: :unprocessable_entity
+  end
+
   def update
     game = Game.find(games_params[:id])
 
@@ -20,7 +28,7 @@ class InternalApi::GamesController < ApplicationController
 
     result = game.check_three_for_set(game_cards)
 
-    new_cards, three_cards, last_legs =
+    new_cards, three_cards, last_legs, num_of_cards_in_deck =
       if result
         game_cards.each { |gc| gc.update!(state: :used) }
         game.draw_cards(old_cards: game_cards.to_a)
@@ -28,7 +36,7 @@ class InternalApi::GamesController < ApplicationController
         [[], []]
       end
 
-    render json: { result: result, new_cards: new_cards, three_cards: three_cards, game_over: last_legs }, status: :ok
+    render json: { result: result, new_cards: new_cards, three_cards: three_cards, game_over: last_legs, num_of_cards_in_deck: num_of_cards_in_deck }, status: :ok
   rescue StandardError => e
     render json: { error: e }, status: :unprocessable_entity
   end

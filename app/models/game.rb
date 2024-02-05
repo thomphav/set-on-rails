@@ -27,8 +27,8 @@ class Game < ApplicationRecord
 
   def as_json(options = {})
     super(options).merge({
-      start_time: start_time.to_i,
-      end_time: end_time.to_i
+      start_time: start_time.nil? ? nil : start_time.to_i * 1000,
+      end_time: end_time.nil? ? nil : end_time.to_i * 1000
     })
   end
 
@@ -93,7 +93,9 @@ class Game < ApplicationRecord
       end
     end
 
-    [candidate_cards, three_cards, last_legs]
+    num_of_cards_in_deck = game_cards.in_deck.count
+
+    [candidate_cards, three_cards, last_legs, num_of_cards_in_deck]
   end
 
   def check_board_for_set(drawn_gcs)

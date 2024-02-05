@@ -7,3 +7,10 @@ export const setCsrfToken = () => {
   }
   return "no-csrf-token"
 };
+
+export const formatTimeFromCentiseconds = (centiseconds: number) => {
+  const totalSeconds = Math.floor(centiseconds / 100);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return [minutes, seconds].map(v => v.toString().padStart(2, '0')).join(":");
+};

@@ -7,13 +7,15 @@ interface BoardProps {
   game: game;
   gameCards: gameCard[];
   gameOver: boolean;
+  numOfCardsInDeck: number;
   setGameOver: (gameOver: boolean) => void;
-  handleGameOver: (time: number) => void;
+  handleGameOver: () => void;
 }
 
-const Board = ({ game, gameCards, gameOver, setGameOver, handleGameOver }: BoardProps) => {
+const Board = ({ game, gameCards, gameOver, numOfCardsInDeck, setGameOver, handleGameOver }: BoardProps) => {
   const [selected, setSelected] = useState<number[]>([]);
   const [cards, setCards] = useState<gameCard[]>(gameCards)
+  const [numCardsInDeck, setNumCardsInDeck] = useState<number>(numOfCardsInDeck)
 
   const handleSelect = (id: number) => {
     if (selected.find((sid) => sid === id)) {
@@ -40,14 +42,17 @@ const Board = ({ game, gameCards, gameOver, setGameOver, handleGameOver }: Board
       const data = await response.json();
   
       if (data.game_over) {
-        setGameOver(true)
-        handleGameOver
+        setGameOver(true);
+        handleGameOver();
       }
-      if (data.result) setCards(data.new_cards)
+      if (data.result) {
+        setCards(data.new_cards)
+        setNumCardsInDeck(data.num_of_cards_in_deck)
+      }
   
-      setSelected([])
+      setSelected([]);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   };
 
@@ -103,6 +108,7 @@ const Board = ({ game, gameCards, gameOver, setGameOver, handleGameOver }: Board
           />
         ))}
       </div>
+      <h2>{numCardsInDeck} card{numCardsInDeck > 1 ? "s" : ""} in the deck</h2>
     </>
   );
 };

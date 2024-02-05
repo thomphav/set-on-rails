@@ -8,9 +8,10 @@ interface GameProps {
   game: game;
   gameCards: gameCard[];
   initialGameOver: boolean;
+  numOfCardsInDeck: number;
 }
 
-const Game = ({ game, gameCards, initialGameOver }: GameProps) => {
+const Game = ({ game, gameCards, initialGameOver, numOfCardsInDeck }: GameProps) => {
   const [gameOver, setGameOver] = useState<boolean>(initialGameOver);
 
   const handleGameOver = async () => {
@@ -46,6 +47,7 @@ const Game = ({ game, gameCards, initialGameOver }: GameProps) => {
         gameOver={gameOver}
         setGameOver={setGameOver}
         handleGameOver={handleGameOver}
+        numOfCardsInDeck={numOfCardsInDeck}
       />
     </div>
   )

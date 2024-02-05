@@ -2,6 +2,6 @@ class DashboardController < ApplicationController
   before_action :authenticate
 
   def index
-    @games = Game.finished.order(end_time: :desc)
+    @games = current_account.games.finished.order(end_time: :desc)
   end
 end

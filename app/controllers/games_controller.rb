@@ -1,8 +1,9 @@
 class GamesController < ApplicationController
+  before_action :authenticate
   protect_from_forgery with: :exception
 
   def create
-    game = Game.new
+    game = current_account.games.build
 
     Game.transaction do
       game.save!
@@ -25,15 +26,9 @@ class GamesController < ApplicationController
   end
 
   def show
-    game = Game.find(params[:id])
+    @game = Game.find(params[:id])
 
-    @game =
-      game
-        .attributes
-        .except("created_at", "updated_at")
-        .merge(start_time: (game.start_time&.to_i || 0) * 1000, end_time: (game.end_time&.to_i || 0) * 1000)
-
-    @game_cards, _, @game_over = game.draw_cards
+    @game_cards, _, @game_over, @num_of_cards_in_deck = @game.draw_cards
   rescue StandardError => e
     Rails.logger.error(e)
     render plain: "error", status: :unprocessable_entity

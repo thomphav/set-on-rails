@@ -11,9 +11,24 @@
           <a href="<%= Rails.application.routes.url_helpers.dashboard_index_path %>">Dashboard</a>
         </div>
       <% end %>
-      <div class="hover:text-blue-600">
-        <a href="<%= rodauth.login_path %>">Login</a>
-      </div>
+
+      <% unless current_account %>
+        <div class="hover:text-blue-600">
+          <a href="<%= rodauth.login_path %>">Login</a>
+        </div>
+      <% end %>
+
+      <% if current_account %>
+        <div class="hover:text-blue-600">
+          <a href="<%= Rails.application.routes.url_helpers.dashboard_index_path %>">Profile</a>
+        </div>
+      <% end %>
+
+      <% if current_account %>
+        <div class="hover:text-blue-600">
+          <a href="<%= rodauth.logout_path %>">Logout</a>
+        </div>
+      <% end %>
     </div>
   </div>
 </header>

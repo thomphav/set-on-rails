@@ -71,3 +71,5 @@ gem "react-rails", "~> 3.2"
 gem "view_component", "~> 3.10"
 
 gem "tailwindcss-rails", "~> 2.3"
+
+gem "rodauth-rails"

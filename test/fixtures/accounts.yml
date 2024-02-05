@@ -1,0 +1,18 @@
+# == Schema Information
+#
+# Table name: accounts
+#
+#  id            :bigint           not null, primary key
+#  status        :integer          default("unverified"), not null
+#  email         :citext           not null
+#  password_hash :string
+#
+one:
+  email: freddie@queen.com
+  password_hash: <%= RodauthMain.allocate.password_hash("password") %>
+  status: verified
+
+two:
+  email: brian@queen.com
+  password_hash: <%= RodauthMain.allocate.password_hash("password") %>
+  status: verified

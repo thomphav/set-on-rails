@@ -7,6 +7,7 @@
 #  updated_at :datetime         not null
 #  start_time :datetime
 #  end_time   :datetime
+#  account_id :bigint           not null
 #
 require "test_helper"
 

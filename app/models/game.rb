@@ -7,8 +7,11 @@
 #  updated_at :datetime         not null
 #  start_time :datetime
 #  end_time   :datetime
+#  account_id :bigint           not null
 #
 class Game < ApplicationRecord
+  belongs_to :account
+
   has_many :game_cards, -> { order(position: :asc) }, dependent: :destroy
 
   scope :active, -> { where.not(start_time: nil).where(end_time: nil) }

@@ -14,7 +14,8 @@ class ReactComponent < ViewComponent::Base
       data: {
         react_component: component,
         props: props
-      }
+      },
+      class: "h-full"
     )
   end
 

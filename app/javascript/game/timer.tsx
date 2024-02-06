@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { setCsrfToken, formatTimeFromCentiseconds } from './utils';
+import { setCsrfToken, formatTimeFromCentiseconds } from '../utils';
 import { game } from '../common_types/types';
 
 const Timer = ({ game, gameOver }: { game: game, gameOver: boolean }) => {

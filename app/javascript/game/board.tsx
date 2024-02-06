@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { SvgDefs } from "./svg_defs";
-import { setCsrfToken } from "./utils";
+import { setCsrfToken } from "../utils";
 import { game, gameCard } from "../common_types/types";
 
 interface BoardProps {
@@ -16,6 +16,8 @@ const Board = ({ game, gameCards, gameOver, numOfCardsInDeck, setGameOver, handl
   const [selected, setSelected] = useState<number[]>([]);
   const [cards, setCards] = useState<gameCard[]>(gameCards)
   const [numCardsInDeck, setNumCardsInDeck] = useState<number>(numOfCardsInDeck)
+  const [notASet, setNotASet] = useState<boolean>(false);
+  const [isASet, setIsASet] = useState<boolean>(false);
 
   const handleSelect = (id: number) => {
     if (selected.find((sid) => sid === id)) {
@@ -46,11 +48,26 @@ const Board = ({ game, gameCards, gameOver, numOfCardsInDeck, setGameOver, handl
         handleGameOver();
       }
       if (data.result) {
-        setCards(data.new_cards)
-        setNumCardsInDeck(data.num_of_cards_in_deck)
+        setIsASet(true);
+
+        const timeout = setTimeout(() => {
+          setCards(data.new_cards)
+          setNumCardsInDeck(data.num_of_cards_in_deck)
+          setIsASet(false);
+          setSelected([]);
+        }, 300);
+
+        return () => clearTimeout(timeout);
+      } else {
+        setNotASet(true);
+
+        const timeout = setTimeout(() => {
+          setNotASet(false);
+          setSelected([]);
+        }, 300);
+
+        return () => clearTimeout(timeout);
       }
-  
-      setSelected([]);
     } catch (error) {
       console.error(error);
     }
@@ -70,7 +87,9 @@ const Board = ({ game, gameCards, gameOver, numOfCardsInDeck, setGameOver, handl
       disabled={gameOver}
       className={
                   `flex justify-center items-center border-2 rounded-md w-[250px] h-[150px]
-                  ${selected.find((id) => id === gameCard.id) && "border-blue-500"}
+                  ${notASet && selected.find((id) => id === gameCard.id) && "border-4 border-red-500 transition-colors duration-500"}
+                  ${isASet && selected.find((id) => id === gameCard.id) && "border-4 border-green-500 transition-colors duration-500"}
+                  ${selected.find((id) => id === gameCard.id) && "border-4 border-blue-500"}
                   ${!gameOver && "hover:bg-gray-100"}`
                 }
     >
@@ -94,7 +113,7 @@ const Board = ({ game, gameCards, gameOver, numOfCardsInDeck, setGameOver, handl
   }, [selected]);
 
   return (
-    <>
+    <div className="flex flex-col items-center space-y-8">
       <SvgDefs />
       {gameOver && <h2 className="mx-auto text-3xl">Game Over</h2>}
       <div className="mx-auto grid grid-cols-3 gap-4">
@@ -108,8 +127,8 @@ const Board = ({ game, gameCards, gameOver, numOfCardsInDeck, setGameOver, handl
           />
         ))}
       </div>
-      <h2>{numCardsInDeck} card{numCardsInDeck > 1 ? "s" : ""} in the deck</h2>
-    </>
+      <h2>{numCardsInDeck} card{numCardsInDeck === 1 ? "" : "s"} in the deck</h2>
+    </div>
   );
 };
 

@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:16
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_USER: thomas
+      POSTGRES_PASSWORD: ${SET_RAILS_DATABASE_PASSWORD_PRODUCTION}
+      POSTGRES_DB: set_rails_production
+    ports:
+      - 5432:5432
+  web:
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - .:/set-rails
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      - DB_USERNAME=thomas
+      - DB_PASSWORD=${SET_RAILS_DATABASE_PASSWORD_PRODUCTION}
+      - DB_HOST=db
+      - RAILS_ENV=production
+volumes:
+  postgres_data:

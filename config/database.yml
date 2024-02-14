@@ -22,6 +22,10 @@ default: &default
 development:
   <<: *default
   database: set_rails_development
+  username: thomas
+  password: <%= ENV["SET_RAILS_DATABASE_PASSWORD_DEVELOPMENT"] %>
+  host: db
+  port: 5432
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -81,4 +85,5 @@ production:
   <<: *default
   database: set_rails_production
   username: set_rails
-  password: <%= ENV["SET_RAILS_DATABASE_PASSWORD"] %>
+  password: <%= ENV["SET_RAILS_DATABASE_PASSWORD_PRODUCTION"] %>
+  host: db

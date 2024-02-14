@@ -18,7 +18,7 @@ class Card < ApplicationRecord
   enum shading: [:solid, :striped, :open]
   enum number: [:one, :two, :three]
 
-  validate :read_only
+  # validate :read_only
 
   private
 

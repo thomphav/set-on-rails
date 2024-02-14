@@ -22,7 +22,7 @@ default: &default
 development:
   <<: *default
   database: set_rails_development
-  username: thomas
+  username: <%= ENV["POSTGRES_USER"] %>
   password: <%= ENV["SET_RAILS_DATABASE_PASSWORD_DEVELOPMENT"] %>
   host: db
   port: 5432
@@ -84,6 +84,6 @@ test:
 production:
   <<: *default
   database: set_rails_production
-  username: set_rails
+  username: <%= ENV["POSTGRES_USER"] %>
   password: <%= ENV["SET_RAILS_DATABASE_PASSWORD_PRODUCTION"] %>
   host: db

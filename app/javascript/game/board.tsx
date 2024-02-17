@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { SvgDefs } from "./svg_defs";
 import { setCsrfToken } from "../utils";
 import { game, gameCard } from "../common_types/types";
+import useCable from '../hooks/use_cable';
 
 interface BoardProps {
   game: game;
@@ -10,6 +11,14 @@ interface BoardProps {
   numOfCardsInDeck: number;
   setGameOver: (gameOver: boolean) => void;
   handleGameOver: () => void;
+}
+
+interface checkForSetResponse {
+  result: boolean;
+  new_cards: gameCard[];
+  three_cards: gameCard[];
+  game_over: boolean;
+  num_of_cards_in_deck: number;
 }
 
 const Board = ({ game, gameCards, gameOver, numOfCardsInDeck, setGameOver, handleGameOver }: BoardProps) => {
@@ -31,7 +40,7 @@ const Board = ({ game, gameCards, gameOver, numOfCardsInDeck, setGameOver, handl
     const token = setCsrfToken();
   
     try {
-      const response = await fetch(`/internal_api/games/check_for_set`, {
+      await fetch(`/internal_api/games/check_for_set`, {
         method: 'POST',
         headers: {
           "X-Requested-With": "XMLHttpRequest",
@@ -40,34 +49,6 @@ const Board = ({ game, gameCards, gameOver, numOfCardsInDeck, setGameOver, handl
         },
         body: JSON.stringify({ game_id: game.id, ids: selected })
       })
-  
-      const data = await response.json();
-  
-      if (data.game_over) {
-        setGameOver(true);
-        handleGameOver();
-      }
-      if (data.result) {
-        setIsASet(true);
-
-        const timeout = setTimeout(() => {
-          setCards(data.new_cards)
-          setNumCardsInDeck(data.num_of_cards_in_deck)
-          setIsASet(false);
-          setSelected([]);
-        }, 300);
-
-        return () => clearTimeout(timeout);
-      } else {
-        setNotASet(true);
-
-        const timeout = setTimeout(() => {
-          setNotASet(false);
-          setSelected([]);
-        }, 300);
-
-        return () => clearTimeout(timeout);
-      }
     } catch (error) {
       console.error(error);
     }
@@ -106,11 +87,44 @@ const Board = ({ game, gameCards, gameOver, numOfCardsInDeck, setGameOver, handl
     </button>
   )
 
+  const onReceived = (data: checkForSetResponse) => {
+    console.debug("ON RECEIVED", data)
+
+    if (data.game_over) {
+      setGameOver(true);
+      handleGameOver();
+    }
+
+    if (data.result) {
+      setIsASet(true);
+
+      const timeout = setTimeout(() => {
+        setCards(data.new_cards)
+        setNumCardsInDeck(data.num_of_cards_in_deck)
+        setIsASet(false);
+        setSelected([]);
+      }, 300);
+
+      return () => clearTimeout(timeout);
+    } else {
+      setNotASet(true);
+
+      const timeout = setTimeout(() => {
+        setNotASet(false);
+        setSelected([]);
+      }, 300);
+
+      return () => clearTimeout(timeout);
+    }
+  }
+
   useEffect(() => {
     if (selected.length === 3) {
       handleSubmit();
     }
   }, [selected]);
+
+  useCable({ channel: 'ApplicationCable::GameChannel', game_id: game.id }, onReceived);
 
   return (
     <div className="flex flex-col items-center space-y-8">

@@ -36,7 +36,11 @@ class InternalApi::GamesController < ApplicationController
         [[], []]
       end
 
-    render json: { result: result, new_cards: new_cards, three_cards: three_cards, game_over: last_legs, num_of_cards_in_deck: num_of_cards_in_deck }, status: :ok
+    data = { result: result, new_cards: new_cards, three_cards: three_cards, game_over: last_legs, num_of_cards_in_deck: num_of_cards_in_deck }
+
+    ActionCable.server.broadcast("game_#{game.id}", data.to_json)
+
+    render json: data, status: :ok
   rescue StandardError => e
     render json: { error: e }, status: :unprocessable_entity
   end

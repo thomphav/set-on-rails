@@ -42,6 +42,7 @@ class InternalApi::GamesController < ApplicationController
 
     render json: data, status: :ok
   rescue StandardError => e
+    Rails.logger.error("Error checking for set:", e)
     render json: { error: e }, status: :unprocessable_entity
   end
 

@@ -1,4 +1,8 @@
 class InternalApi::GamesController < ApplicationController
+  def start
+    ActionCable.server.broadcast("game_#{params[:game_id]}_room", { action: :start }.to_json)
+  end
+
   def show
     game = Game.find(params[:id])
 

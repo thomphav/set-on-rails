@@ -45,11 +45,6 @@ class GamesController < ApplicationController
 
   def room
     @game = Game.find(params[:id])
-    @game.room.set_room(account: current_account)
-
-    @room = @game.room.get_room
-
-    ActionCable.server.broadcast("game_#{@game.id}_room", @room.to_json)
   rescue StandardError => e
     Rails.logger.error(e)
     render plain: "error", status: :unprocessable_entity

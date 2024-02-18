@@ -13,7 +13,7 @@ class Game::Room
     hash.values.map { JSON.parse(_1) }
   end
 
-  def set_room(account:)
+  def add_to_room(account:)
     account_key = "account:#{account.id}"
 
     account_data = {
@@ -22,6 +22,12 @@ class Game::Room
     }.to_json
 
     redis.hset(redis_hash_key, account_key, account_data)
+  end
+
+  def remove_from_room(account_id:)
+    account_key = "account:#{account_id}"
+
+    redis.hdel(redis_hash_key, account_key)
   end
 
   private

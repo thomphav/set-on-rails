@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   namespace :internal_api do
     resources :games, only: [:show, :update] do
       collection do
+        post :start
         post :check_for_set
       end
     end

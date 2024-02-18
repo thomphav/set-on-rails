@@ -17,12 +17,24 @@ class Game < ApplicationRecord
   scope :active, -> { where.not(start_time: nil).where(end_time: nil) }
   scope :finished, -> { where.not(start_time: nil).where.not(end_time: nil) }
 
+  def started?
+    start_time.present?
+  end
+
   def active?
-    start_time.present? && end_time.nil?
+    started? && end_time.nil?
   end
 
   def finished?
-    start_time.present? && end_time.present?
+    started? && end_time.present?
+  end
+
+  def mark_as_started!
+    update!(start_time: Time.current)
+  end
+
+  def mark_as_finished!
+    update!(end_time: Time.current)
   end
 
   def as_json(options = {})
@@ -94,6 +106,8 @@ class Game < ApplicationRecord
     end
 
     num_of_cards_in_deck = game_cards.in_deck.count
+
+    mark_as_finished! if last_legs && active?
 
     [candidate_cards, three_cards, last_legs, num_of_cards_in_deck]
   end

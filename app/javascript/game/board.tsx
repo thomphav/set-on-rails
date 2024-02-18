@@ -10,7 +10,6 @@ interface BoardProps {
   gameOver: boolean;
   numOfCardsInDeck: number;
   setGameOver: (gameOver: boolean) => void;
-  handleGameOver: () => void;
 }
 
 interface checkForSetResponse {
@@ -21,7 +20,7 @@ interface checkForSetResponse {
   num_of_cards_in_deck: number;
 }
 
-const Board = ({ game, gameCards, gameOver, numOfCardsInDeck, setGameOver, handleGameOver }: BoardProps) => {
+const Board = ({ game, gameCards, gameOver, numOfCardsInDeck, setGameOver }: BoardProps) => {
   const [selected, setSelected] = useState<number[]>([]);
   const [cards, setCards] = useState<gameCard[]>(gameCards)
   const [numCardsInDeck, setNumCardsInDeck] = useState<number>(numOfCardsInDeck)
@@ -92,7 +91,6 @@ const Board = ({ game, gameCards, gameOver, numOfCardsInDeck, setGameOver, handl
 
     if (data.game_over) {
       setGameOver(true);
-      handleGameOver();
     }
 
     if (data.result) {

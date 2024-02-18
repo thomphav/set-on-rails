@@ -6,7 +6,11 @@ Rails.application.routes.draw do
   root "home#index"
 
   resources :home, only: [:index]
-  resources :games, only: [:show, :create]
+  resources :games, only: [:show, :create] do
+    member do
+      get :room
+    end
+  end
   resources :dashboard, only: [:index]
 
   namespace :internal_api do

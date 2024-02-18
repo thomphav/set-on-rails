@@ -19,7 +19,7 @@ class GamesController < ApplicationController
       end
     end
 
-    redirect_to game_path(game.id)
+    redirect_to room_game_path(game.id)
   rescue StandardError => e
     Rails.logger.error(e)
     render plain: "error", status: :unprocessable_entity
@@ -38,6 +38,18 @@ class GamesController < ApplicationController
     #   game_over: @game_over,
     #   num_of_cards_in_deck: @num_of_cards_in_deck
     # )
+  rescue StandardError => e
+    Rails.logger.error(e)
+    render plain: "error", status: :unprocessable_entity
+  end
+
+  def room
+    @game = Game.find(params[:id])
+    @game.room.set_room(account: current_account)
+
+    @room = @game.room.get_room
+
+    ActionCable.server.broadcast("game_#{@game.id}_room", @room.to_json)
   rescue StandardError => e
     Rails.logger.error(e)
     render plain: "error", status: :unprocessable_entity

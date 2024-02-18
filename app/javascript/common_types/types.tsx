@@ -11,3 +11,8 @@ export interface gameCard {
   shading: string
   formatted_number: number
 }
+
+export interface RoomPlayer {
+  id: number
+  email: string
+}

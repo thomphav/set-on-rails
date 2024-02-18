@@ -128,4 +128,9 @@ class Game < ApplicationRecord
 
     result
   end
+
+  delegate :get_room, to: :room
+  def room
+    @room ||= Game::Room.new(game: self)
+  end
 end

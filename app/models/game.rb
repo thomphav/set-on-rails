@@ -13,6 +13,7 @@ class Game < ApplicationRecord
   belongs_to :account
 
   has_many :game_cards, -> { order(position: :asc) }, dependent: :destroy
+  has_many :game_players, dependent: :destroy
 
   scope :active, -> { where.not(start_time: nil).where(end_time: nil) }
   scope :finished, -> { where.not(start_time: nil).where.not(end_time: nil) }
@@ -143,7 +144,12 @@ class Game < ApplicationRecord
     result
   end
 
-  delegate :get_room, :add_to_room, :remove_from_room, to: :room
+  delegate :get_room,
+           :get_room_accounts,
+           :add_to_room,
+           :remove_from_room,
+           :clear_room,
+           to: :room
   def room
     @room ||= Game::Room.new(game: self)
   end

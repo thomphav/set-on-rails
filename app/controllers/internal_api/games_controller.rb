@@ -1,5 +1,10 @@
 class InternalApi::GamesController < ApplicationController
   def start
+    game = Game.find(params[:game_id])
+    accounts = game.get_room_accounts
+    accounts.each { _1.game_players.create!(game: game) }
+
+    game.clear_room
     ActionCable.server.broadcast("game_#{params[:game_id]}_room", { action: :start }.to_json)
   end
 

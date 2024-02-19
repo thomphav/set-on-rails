@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  # before_action :authenticate
+  before_action :authenticate
   protect_from_forgery with: :exception
 
   def create
@@ -27,6 +27,9 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.find(params[:id])
+
+    redirect_to root_path unless current_account.game_players.where(game: @game).exists?
+
     @game.mark_as_started! unless @game.started?
 
     @game_cards, _, @game_over, @num_of_cards_in_deck = @game.draw_cards

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_05_003056) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_19_001521) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "plpgsql"
@@ -65,6 +65,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_05_003056) do
     t.index ["game_id"], name: "index_game_cards_on_game_id"
   end
 
+  create_table "game_players", force: :cascade do |t|
+    t.bigint "game_id", null: false
+    t.bigint "player_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["game_id"], name: "index_game_players_on_game_id"
+    t.index ["player_id"], name: "index_game_players_on_player_id"
+  end
+
   create_table "games", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -80,5 +89,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_05_003056) do
   add_foreign_key "account_verification_keys", "accounts", column: "id"
   add_foreign_key "game_cards", "cards"
   add_foreign_key "game_cards", "games"
+  add_foreign_key "game_players", "accounts", column: "player_id"
+  add_foreign_key "game_players", "games"
   add_foreign_key "games", "accounts"
 end

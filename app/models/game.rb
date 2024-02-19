@@ -39,6 +39,16 @@ class Game < ApplicationRecord
     update!(end_time: Time.current)
   end
 
+  def leaderboard
+    # REFACTOR
+    game_players.map do |gp|
+      {
+        email: gp.player.email,
+        score: gp.score
+      }
+    end
+  end
+
   def as_json(options = {})
     super(options).merge({
       start_time: start_time.nil? ? nil : start_time.to_i * 1000,

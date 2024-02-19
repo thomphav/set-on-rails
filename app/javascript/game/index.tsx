@@ -94,7 +94,7 @@ const Game = ({ game, gameCards, initialGameOver, numOfCardsInDeck, initialLeade
 
   return (
     <div className="flex w-full py-20">
-      <div className="flex flex-col w-full space-y-8 border border-blue-500">
+      <div className="flex flex-col w-full space-y-8">
         <Timer
           game={game}
           gameOver={gameOver}
@@ -109,14 +109,16 @@ const Game = ({ game, gameCards, initialGameOver, numOfCardsInDeck, initialLeade
           notASet={notASet}
         />
       </div>
-      <div className="w-[400px] border border-red-500">
-        LeaderBoard:
-        {leaderBoard?.map((player) => (
-          <div key={player.id} className="border rounded p-2">
-            {player.email}
-            {player.score}
-          </div>
-        ))}
+      <div className="w-[400px]">
+        Leaderboard
+        <div className="flex flex-col space-y-2 p-2">
+          {leaderBoard?.map((player) => (
+            <div key={player.id} className="flex border rounded p-2 justify-between">
+              <span>{player.email}</span>
+              <span>{player.score}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )

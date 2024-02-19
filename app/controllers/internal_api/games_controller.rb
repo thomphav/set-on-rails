@@ -39,6 +39,11 @@ class InternalApi::GamesController < ApplicationController
 
     new_cards, three_cards, last_legs, num_of_cards_in_deck =
       if result
+        player = current_account.game_players.find_by(game: game)
+
+        # eventually we'd want to rather count the specific CardSet records but this'll do for now
+        player&.increment!(:score)
+
         game_cards.each { |gc| gc.update!(state: :used) }
         game.draw_cards(old_cards: game_cards.to_a)
       else
@@ -50,7 +55,8 @@ class InternalApi::GamesController < ApplicationController
       new_cards: new_cards,
       three_cards: three_cards,
       game_over: last_legs,
-      num_of_cards_in_deck: num_of_cards_in_deck
+      num_of_cards_in_deck: num_of_cards_in_deck,
+      leaderboard: game.leaderboard
     }
 
     ActionCable.server.broadcast("game_#{game.id}", data.to_json)

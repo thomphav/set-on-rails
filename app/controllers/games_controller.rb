@@ -34,8 +34,8 @@ class GamesController < ApplicationController
 
     @game_cards, _, @game_over, @num_of_cards_in_deck = @game.draw_cards
 
-    # should be a method called leaderboard from game and SERIALIZE accounts pls thanks
-    @players = @game.game_players.map(&:player)
+    # should be a method called leaderboard from game
+    @players = @game.leaderboard
   rescue StandardError => e
     Rails.logger.error(e)
     render plain: "error", status: :unprocessable_entity

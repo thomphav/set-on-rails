@@ -16,7 +16,7 @@
       <% unless @hide_topnav %>
         <%= render 'layouts/topnav' %>
       <% end %>
-      logged in as: <%= current_account.email %>
+      logged in as: <%= current_account&.email %>
       <%= yield %>
     </main>
   </body>

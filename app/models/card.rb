@@ -13,6 +13,8 @@
 class Card < ApplicationRecord
   has_many :game_cards, dependent: :destroy
 
+  FEATURES = %i[color symbol shading number].freeze
+
   enum color: [:red, :green, :purple]
   enum symbol: [:diamond, :squiggle, :oval]
   enum shading: [:solid, :striped, :open]

@@ -7,6 +7,7 @@
 #  player_id  :bigint           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  score      :integer          default(0)
 #
 class GamePlayer < ApplicationRecord
   belongs_to :player, class_name: "Account"

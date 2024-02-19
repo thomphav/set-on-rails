@@ -20,4 +20,21 @@ class GameCard < ApplicationRecord
   delegate :symbol, to: :card
   delegate :shading, to: :card
   delegate :number, to: :card
+
+  scope :with_card_attributes, -> {
+    joins(:card)
+    .select(
+      "game_cards.*",
+      "cards.color AS color",
+      "cards.symbol AS symbol",
+      "cards.shading AS shading",
+      "cards.number AS number",
+      # kinda dumb but I want to keep 0,1,2 int values in the db for now.
+      "CASE cards.number
+        WHEN 0 THEN '#{Card.numbers["one"] + 1}'
+        WHEN 1 THEN '#{Card.numbers["two"] + 1}'
+        WHEN 2 THEN '#{Card.numbers["three"] + 1}'
+        END as formatted_number"
+    )
+  }
 end

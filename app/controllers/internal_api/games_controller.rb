@@ -34,27 +34,17 @@ class InternalApi::GamesController < ApplicationController
   def check_for_set
     game = Game.find(params[:game_id])
     game_cards = GameCard.where(id: params[:ids])
+    result = game.set_from_cards?(game_cards: game_cards)
 
-    result = game.check_three_for_set(game_cards)
+    new_cards, three_cards, game_over, num_of_cards_in_deck = game.handle_result(result: result, game_cards: game_cards, current_account: current_account)
 
-    new_cards, three_cards, last_legs, num_of_cards_in_deck =
-      if result
-        player = current_account.game_players.find_by(game: game)
-
-        # eventually we'd want to rather count the specific CardSet records but this'll do for now
-        player&.increment!(:score)
-
-        game_cards.each { |gc| gc.update!(state: :used) }
-        game.draw_cards(old_cards: game_cards.to_a)
-      else
-        [[], []]
-      end
+    game.mark_as_finished! if game_over && game.active?
 
     data = {
       result: result,
       new_cards: new_cards,
       three_cards: three_cards,
-      game_over: last_legs,
+      game_over: game_over,
       num_of_cards_in_deck: num_of_cards_in_deck,
       leaderboard: game.leaderboard
     }

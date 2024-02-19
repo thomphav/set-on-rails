@@ -33,6 +33,9 @@ class GamesController < ApplicationController
     @game.mark_as_started! unless @game.started?
 
     @game_cards, _, @game_over, @num_of_cards_in_deck = @game.draw_cards
+
+    # should be a method called leaderboard from game and SERIALIZE accounts pls thanks
+    @players = @game.game_players.map(&:player)
   rescue StandardError => e
     Rails.logger.error(e)
     render plain: "error", status: :unprocessable_entity

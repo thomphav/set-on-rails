@@ -28,7 +28,7 @@ const Timer = ({ game, gameOver }: { game: game, gameOver: boolean }) => {
 
   return (
     <div className="flex justify-center">
-      <h2 className="text-4xl">{displayTime}</h2>
+      <h2 className="text-3xl">{displayTime}</h2>
     </div>
   );
 };

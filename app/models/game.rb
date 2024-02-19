@@ -14,6 +14,7 @@ class Game < ApplicationRecord
 
   has_many :game_cards, -> { order(position: :asc) }, dependent: :destroy
   has_many :game_players, dependent: :destroy
+  has_many :players, through: :game_players, source: :account
 
   scope :active, -> { where.not(start_time: nil).where(end_time: nil) }
   scope :finished, -> { where.not(start_time: nil).where.not(end_time: nil) }

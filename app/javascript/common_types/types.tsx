@@ -16,3 +16,9 @@ export interface RoomPlayer {
   id: number
   email: string
 }
+
+export interface Player {
+  id: number
+  email: string
+  score?: number
+}

@@ -1,4 +1,4 @@
-<%= form_with url: rodauth.login_path, method: :post, data: { turbo: false }, class: "w-full max-w-sm" do |form| %>
+<%= form_with url: rodauth.login_path, method: :post, data: { turbo: false }, class: "w-full" do |form| %>
   <% if rodauth.skip_login_field_on_login? %>
     <div class="mb-6">
       <%= form.label "login", rodauth.login_label, class: "block text-sm font-semibold" %>
@@ -7,7 +7,7 @@
   <% else %>
     <div class="mb-6">
       <%= form.label "login", rodauth.login_label, class: "block text-sm font-semibold" %>
-      <%= form.email_field rodauth.login_param, value: params[rodauth.login_param], id: "login", autocomplete: rodauth.login_field_autocomplete_value, required: true, class: "mt-2 text-sm w-full px-3 py-2 border rounded-md dark:text-gray-100 #{rodauth.field_error(rodauth.login_param) ? "border-red-600 focus:ring-red-600 focus:border-red-600 dark:border-red-400 dark:focus:ring-red-400" : "border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400" }", aria: ({ invalid: true, describedby: "login_error_message" } if rodauth.field_error(rodauth.login_param)) %>
+      <%= form.email_field rodauth.login_param, value: params[rodauth.login_param], id: "login", autocomplete: rodauth.login_field_autocomplete_value, required: true, class: "mt-2 text-sm w-full px-3 py-2 border rounded-md #{rodauth.field_error(rodauth.login_param) ? "border-red-600 focus:ring-red-600 focus:border-red-600 dark:border-red-400 dark:focus:ring-red-400" : "border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400" }", aria: ({ invalid: true, describedby: "login_error_message" } if rodauth.field_error(rodauth.login_param)) %>
       <%= content_tag(:span, rodauth.field_error(rodauth.login_param), class: "block mt-1 text-red-600 text-xs dark:text-red-400", id: "login_error_message") if rodauth.field_error(rodauth.login_param) %>
     </div>
   <% end %>
@@ -15,7 +15,7 @@
   <% unless rodauth.skip_password_field_on_login? %>
     <div class="mb-6">
       <%= form.label "password", rodauth.password_label, class: "block text-sm font-semibold" %>
-      <%= form.password_field rodauth.password_param, value: "", id: "password", autocomplete: rodauth.password_field_autocomplete_value, required: true, class: "mt-2 text-sm w-full px-3 py-2 border rounded-md dark:text-gray-100 #{rodauth.field_error(rodauth.password_param) ? "border-red-600 focus:ring-red-600 focus:border-red-600 dark:border-red-400 dark:focus:ring-red-400" : "border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400" }", aria: ({ invalid: true, describedby: "password_error_message" } if rodauth.field_error(rodauth.password_param)) %>
+      <%= form.password_field rodauth.password_param, value: "", id: "password", autocomplete: rodauth.password_field_autocomplete_value, required: true, class: "mt-2 text-sm w-full px-3 py-2 border rounded-md #{rodauth.field_error(rodauth.password_param) ? "border-red-600 focus:ring-red-600 focus:border-red-600 dark:border-red-400 dark:focus:ring-red-400" : "border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400" }", aria: ({ invalid: true, describedby: "password_error_message" } if rodauth.field_error(rodauth.password_param)) %>
       <%= content_tag(:span, rodauth.field_error(rodauth.password_param), class: "block mt-1 text-red-600 text-xs dark:text-red-400", id: "password_error_message") if rodauth.field_error(rodauth.password_param) %>
     </div>
   <% end %>

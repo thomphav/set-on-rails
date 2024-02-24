@@ -5,7 +5,7 @@
         <a href="<%= Rails.application.routes.url_helpers.home_index_path %>">Set</a>
       </div>
     </div>
-    <div class="flex space-x-12">
+    <div class="flex space-x-12 items-center">
       <% if current_account %>
         <div class="hover:text-blue-600">
           <a href="<%= Rails.application.routes.url_helpers.dashboard_index_path %>">Dashboard</a>
@@ -25,9 +25,7 @@
       <% end %>
 
       <% if current_account %>
-        <div class="hover:text-blue-600">
-          <a href="<%= rodauth.logout_path %>">Logout</a>
-        </div>
+        <%= render "rodauth/logout" %>
       <% end %>
     </div>
   </div>

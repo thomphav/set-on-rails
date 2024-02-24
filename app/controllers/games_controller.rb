@@ -19,8 +19,10 @@ class GamesController < ApplicationController
       end
     end
 
+    game.reload
+
     # need to skip current_account here
-    ActionCable.server.broadcast("lobby", { game: @game, action: ApplicationCable::LobbyChannel::RECEIVER_ACTIONS.add }.to_json)
+    ActionCable.server.broadcast("lobby", { game: game, action: ApplicationCable::LobbyChannel::RECEIVER_ACTIONS.add }.to_json)
 
     redirect_to room_game_path(game.id)
   rescue StandardError => e

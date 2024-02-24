@@ -18,6 +18,7 @@ class Game < ApplicationRecord
   has_many :game_players, dependent: :destroy
   has_many :players, through: :game_players, source: :account
 
+  scope :pending, -> { where(start_time: nil) }
   scope :active, -> { where.not(start_time: nil).where(end_time: nil) }
   scope :finished, -> { where.not(start_time: nil).where.not(end_time: nil) }
 
@@ -54,7 +55,8 @@ class Game < ApplicationRecord
   def as_json(options = {})
     super(options).merge({
       start_time: start_time.nil? ? nil : start_time.to_i * 1000,
-      end_time: end_time.nil? ? nil : end_time.to_i * 1000
+      end_time: end_time.nil? ? nil : end_time.to_i * 1000,
+      created_at: created_at.to_i * 1000,
     })
   end
 

@@ -5,7 +5,8 @@ class InternalApi::GamesController < ApplicationController
     accounts.each { _1.game_players.create!(game: game) }
 
     game.clear_room
-    ActionCable.server.broadcast("game_#{params[:game_id]}_room", { action: :start }.to_json)
+    ActionCable.server.broadcast("lobby", { game: game, action: ApplicationCable::LobbyChannel::RECEIVER_ACTIONS.remove }.to_json)
+    ActionCable.server.broadcast("game_#{params[:game_id]}_room", { action: ApplicationCable::GameRoomChannel::RECEIVER_ACTIONS.start }.to_json)
   end
 
   def show

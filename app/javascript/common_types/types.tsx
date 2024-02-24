@@ -2,6 +2,7 @@ export interface game {
   id: number
   start_time: number
   end_time: number
+  created_at: number
 }
 
 export interface gameCard {

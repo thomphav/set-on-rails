@@ -1,4 +1,8 @@
 class ApplicationCable::GameRoomChannel < ActionCable::Channel::Base
+  RECEIVER_ACTIONS = OpenStruct.new(
+    start: "start",
+  )
+
   def subscribed
     stream_from "game_#{params[:game_id]}_room"
 

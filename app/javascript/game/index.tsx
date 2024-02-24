@@ -93,8 +93,9 @@ const Game = ({ game, gameCards, initialGameOver, numOfCardsInDeck, initialLeade
   useCable({ channel: 'ApplicationCable::GameChannel', game_id: game.id }, onReceived);
 
   return (
-    <div className="flex w-full py-20">
-      <div className="flex flex-col w-full space-y-8">
+    <div className="flex w-full h-full px-36 py-24 space-x-16">
+
+      <div className="flex flex-col w-2/3 justify-center space-y-8 h-full border border-gray-300 rounded">
         <Timer
           game={game}
           gameOver={gameOver}
@@ -109,17 +110,26 @@ const Game = ({ game, gameCards, initialGameOver, numOfCardsInDeck, initialLeade
           notASet={notASet}
         />
       </div>
-      <div className="w-[400px]">
-        Leaderboard
-        <div className="flex flex-col space-y-2 p-2">
-          {leaderBoard?.map((player) => (
-            <div key={player.id} className="flex border rounded p-2 justify-between">
-              <span>{player.email}</span>
-              <span>{player.score}</span>
-            </div>
-          ))}
+
+      <div className='flex h-full w-1/3 border border-gray-300 rounded p-6'>
+        <div className='flex flex-col h-full w-full space-y-8'>
+          <h2 className='text-3xl'>Leaderboard</h2>
+          <div className="flex flex-col space-y-2 p-2">
+            {leaderBoard?.map((player: Player, index: number) => (
+              <div key={player.id} className='flex space-x-2.5 w-full'>
+                <div className='flex justify-center border border-gray-100 bg-gray-100 text-gray-500 rounded-md p-3 w-[50px]'>
+                  {index + 1}
+                </div>
+                <div className="flex border border-gray-300 rounded-md p-3 w-full justify-between">
+                  <span>{player.email}</span>
+                  <span>{player.score}</span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
+
     </div>
   )
 };

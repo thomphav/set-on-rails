@@ -30,18 +30,18 @@ const Home = () => {
 
   return (
     <>
-      <div className="flex w-full h-full items-center py-24">
-        <div className="flex w-1/2 h-full items-center">
+      <div className="flex w-full h-full items-center px-36 py-24 space-x-48">
+        <div className="flex w-1/3 h-full items-center justify-center">
           <form className="flex flex-col justify-center items-center mx-auto space-y-16" action="/games" method="post">
             <h1 className="text-6xl">Let's play Set!</h1>
             <CsrfInput />
-            <button className="border border-gray-800 py-4 px-28 w-fit text-4xl rounded-md hover:bg-gray-50" type="submit">New Game</button>
+            <button className="border border-gray-300 py-4 px-28 w-fit text-3xl rounded-md hover:bg-gray-50" type="submit">New Game</button>
           </form>
         </div>
-        <div className="flex justify-center w-1/2 h-full pr-24">
-          <div className="flex flex-col space-y-4 h-full w-full items-center border border-gray-400 rounded p-4">
+        <div className="flex justify-center w-2/3 h-full">
+          <div className="flex flex-col space-y-3 h-full w-full items-center border border-gray-300 rounded p-3">
             {games.map((game: game) => (
-              <a key={game.id} href={`/games/${game.id}/room`} className="border border-gray-400 rounded w-full py-8 flex justify-center items-center hover:bg-gray-100">
+              <a key={game.id} href={`/games/${game.id}/room`} className="border border-gray-300 rounded w-full py-6 flex justify-center items-center hover:bg-gray-100">
                 Created {timeSince(game.created_at)}
               </a>
             ))}

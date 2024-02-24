@@ -16,8 +16,10 @@
       <% unless @hide_topnav %>
         <%= render 'layouts/topnav' %>
       <% end %>
-      logged in as: <%= current_account&.email %>
-      <%= yield %>
+      <%# logged in as: <%= current_account&.email  %>
+      <div class="h-full" style="<%= @hide_topnav ? '' : 'height: calc(100% - 64px);' %>">
+        <%= yield %>
+      </div>
     </main>
   </body>
 </html>

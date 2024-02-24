@@ -19,6 +19,9 @@ class GamesController < ApplicationController
       end
     end
 
+    # need to skip current_account here
+    ActionCable.server.broadcast("lobby", { game: @game, action: ApplicationCable::LobbyChannel::RECEIVER_ACTIONS.add }.to_json)
+
     redirect_to room_game_path(game.id)
   rescue StandardError => e
     Rails.logger.error(e)
@@ -43,9 +46,6 @@ class GamesController < ApplicationController
 
   def room
     @game = Game.find(params[:id])
-
-    # need to skip current_account here
-    ActionCable.server.broadcast("lobby", { game: @game, action: ApplicationCable::LobbyChannel::RECEIVER_ACTIONS.add }.to_json)
   rescue StandardError => e
     Rails.logger.error(e)
     render plain: "error", status: :unprocessable_entity

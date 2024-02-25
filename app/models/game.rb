@@ -69,4 +69,14 @@ class Game < ApplicationRecord
   def room
     @room ||= Game::Room.new(game: self)
   end
+
+  delegate :get_chat,
+           :add_to_chat,
+           :get_message,
+           :clear_chat,
+           to: :chat
+
+  def chat
+    @chat ||= Game::Chat.new(game: self)
+  end
 end

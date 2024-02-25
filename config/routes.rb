@@ -19,6 +19,12 @@ Rails.application.routes.draw do
         post :start
         post :check_for_set
       end
+
+      member do
+        scope module: 'games' do
+          resources :chats, only: [:create]
+        end
+      end
     end
   end
 

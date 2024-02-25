@@ -1,14 +1,22 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useCable from '../hooks/use_cable';
 import { game, RoomPlayer } from '../common_types/types';
 import { setCsrfToken } from '../utils';
 
-const Room = ({ currentAccountId, game }: { currentAccountId: number, game: game }) => {
+interface Message {
+  account_id: number;
+  account_email: string;
+  message: string;
+  sent_at: string;
+}
+
+const Room = ({ currentAccountId, game, chat }: { currentAccountId: number, game: game, chat: Message[] }) => {
   const [room, setRoom] = useState<RoomPlayer[]>([]);
+  const [messages, setMessages] = useState<Message[]>(chat);
 
   const handleStart = async () => {
     const token = setCsrfToken();
-  
+
     try {
       await fetch(`/internal_api/games/start`, {
         method: 'POST',
@@ -24,7 +32,7 @@ const Room = ({ currentAccountId, game }: { currentAccountId: number, game: game
     }
   };
 
-  const onReceived = (data: any) => {
+  const onRoomReceived = (data: any) => {
     if (data.action && data.action === 'start') {
       window.location.href = `/games/${game.id}`
       return
@@ -37,7 +45,45 @@ const Room = ({ currentAccountId, game }: { currentAccountId: number, game: game
     channel: 'ApplicationCable::GameRoomChannel',
     game_id: game.id,
     current_account_id: currentAccountId
-  }, onReceived);
+  }, onRoomReceived);
+
+  const onChatReceived = (data: Message) => {
+    setMessages((prevMessages) => [...prevMessages, data])
+  }
+
+  useCable({
+    channel: 'ApplicationCable::GameChatChannel',
+    game_id: game.id,
+    current_account_id: currentAccountId
+  }, onChatReceived);
+
+  const handleSend = async (e: React.FormEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault();
+      const token = setCsrfToken();
+      const formData = new FormData(e.currentTarget);
+      const message = formData.get('message');
+
+      fetch(`/internal_api/games/${game.id}/chats`, {
+        method: 'POST',
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          "Content-Type": "application/json",
+          "X-CSRF-Token": token,
+        },
+        body: JSON.stringify({ message: message })
+      })
+
+      e.currentTarget.reset();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    const scrollableContainer = document.getElementById('scrollableContainer');
+    if (scrollableContainer) scrollableContainer.scrollTop = scrollableContainer.scrollHeight;
+  }, [messages]);
 
   return (
     <>
@@ -65,15 +111,20 @@ const Room = ({ currentAccountId, game }: { currentAccountId: number, game: game
         <div className='flex h-full w-1/3 border border-gray-300 rounded p-6'>
           <div className='flex flex-col h-full w-full space-y-8'>
             <h2 className='text-3xl'>Chat</h2>
-            <div className='flex flex-col h-full justify-end'>
-              <div className='flex flex-col h-full'>
-
+            <div className='flex flex-col h-full w-full justify-end'>
+              <div id="scrollableContainer" className='flex flex-col h-full w-full max-h-[500px] overflow-y-scroll'>
+                {messages.map((message, index) => (
+                  <div key={index} className='w-full py-1'>
+                    <span className='break-words font-bold inline'>{message.account_email}</span>
+                    <span className='break-words inline'>: {message.message}</span>
+                  </div>
+                ))}
               </div>
 
-              <div className='flex space-x-2'>
-                <input className='border w-full p-2'/>
-                <button className="border-2 border-gray-500 bg-gray-500 hover:border-gray-400 hover:bg-gray-400 text-white rounded p-2 w-[120px]">Send</button>
-              </div>
+              <form className='flex space-x-4' onSubmit={(e) => handleSend(e)}>
+                <input name="message" className='border w-full p-2'/>
+                <button type="submit" className="border-2 border-gray-500 bg-gray-500 hover:border-gray-400 hover:bg-gray-400 text-white rounded p-2 w-[120px]">Send</button>
+              </form>
             </div>
           </div>
         </div>

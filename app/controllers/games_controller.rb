@@ -48,6 +48,7 @@ class GamesController < ApplicationController
 
   def room
     @game = Game.find(params[:id])
+    @chat = @game.get_chat
   rescue StandardError => e
     Rails.logger.error(e)
     render plain: "error", status: :unprocessable_entity

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { SvgDefs } from "./svg_defs";
 import { game, gameCard } from "../common_types/types";
 import { keyCardMapping } from "./utils";
+import GameCard from "./game_card";
 
 interface BoardProps {
   cards: gameCard[];
@@ -22,49 +23,16 @@ const Board = ({
   isASet,
   notASet,
 }: BoardProps) => {
-  interface GameCardProps {
-    gameCard: gameCard;
-    handleSelect: (id: number) => void;
-    selected: number[];
-    gameOver: boolean;
-  }
-
-  const GameCard = ({ gameCard, handleSelect, selected, gameOver }: GameCardProps) => (
-    <button
-      onClick={() => handleSelect(gameCard.id)}
-      disabled={gameOver}
-      className={
-                  `flex justify-center items-center border-2 rounded-md w-[175px] h-[105px]
-                  ${notASet && selected.find((id) => id === gameCard.id) && "border-4 border-red-500 transition-colors duration-500"}
-                  ${isASet && selected.find((id) => id === gameCard.id) && "border-4 border-green-500 transition-colors duration-500"}
-                  ${selected.find((id) => id === gameCard.id) && "border-4 border-blue-500"}
-                  ${!gameOver && "hover:bg-gray-100"}`
-                }
-    >
-      {Array.from({ length: gameCard.formatted_number }).map((_, index) => (
-        <svg key={index} width="36" height="72" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 400">
-          <use
-            href={`#${gameCard.symbol}`}
-            fill={gameCard.shading === "open" ? "transparent" : gameCard.shading === "striped" ? "blue" : gameCard.color}
-            // mask={gameCard.shading === "striped" ? "url(#mask-stripe)" : ""}
-          />
-          <use href={`#${gameCard.symbol}`} stroke={gameCard.color} fill="none" strokeWidth={18} />
-        </svg>
-      ))}
-    </button>
-  )
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const cardsLength = cards.length;
-
       const cardIndex = keyCardMapping[event.key as keyof typeof keyCardMapping];
 
       if (cardIndex > cardsLength - 1) return;
+      if (selected.length === 3 || gameOver) return;
 
-      if (cardIndex !== undefined) {
-        handleSelect(cards[cardIndex].id);
-      }
+      if (cardIndex !== undefined) handleSelect(cards[cardIndex].id);
     };
 
     document.addEventListener('keydown', handleKeyDown);
@@ -86,6 +54,8 @@ const Board = ({
             handleSelect={handleSelect}
             selected={selected}
             gameOver={gameOver}
+            isASet={isASet}
+            notASet={notASet}
           />
         ))}
       </div>

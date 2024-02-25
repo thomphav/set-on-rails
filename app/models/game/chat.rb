@@ -10,35 +10,25 @@ class Game::Chat
   end
 
   def get_chat
-    hash = redis.hgetall(redis_hash_key)
+    values = redis.lrange(redis_list_key, 0, -1)
 
-    hash.values.map { JSON.parse(_1) }
-  end
-
-  def get_message(account_key:)
-    message = redis.hget(redis_hash_key, account_key)
-
-    JSON.parse(message)
+    values.map { JSON.parse(_1) }
   end
 
   def add_to_chat(account:, message:)
-    sent_at = Time.current.to_i
-    account_key = "account:#{account.id}:sent_at:#{sent_at}"
-
     message = MESSAGE_DATA.new(
       account_id: account.id,
       account_email: account.email,
       message: message,
-      sent_at: sent_at,
+      sent_at: Time.current.to_i,
     )
 
-    redis.hset(redis_hash_key, account_key, message.to_json)
-
-    account_key
+    redis.rpush(redis_list_key, message.to_json)
+    ActionCable.server.broadcast("game_#{game.id}_chat", message.to_json)
   end
 
   def clear_chat
-    redis.del(redis_hash_key)
+    redis.del(redis_list_key)
   end
 
   private
@@ -47,7 +37,7 @@ class Game::Chat
     @redis ||= Redis.new
   end
 
-  def redis_hash_key
+  def redis_list_key
     "game:#{game.id}:chat"
   end
 end  

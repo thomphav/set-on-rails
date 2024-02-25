@@ -72,7 +72,6 @@ class Game < ApplicationRecord
 
   delegate :get_chat,
            :add_to_chat,
-           :get_message,
            :clear_chat,
            to: :chat
 

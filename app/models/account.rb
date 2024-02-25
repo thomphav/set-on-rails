@@ -6,9 +6,18 @@
 #  status        :integer          default("unverified"), not null
 #  email         :citext           not null
 #  password_hash :string
+#  username      :string
 #
 class Account < ApplicationRecord
+  # NOTE: checkout app/misc/rodauth_main.rb for callbacks, hooks, and other configuration
+  # example:
+  # before_create_account do
+    # self.account[:username] = "user-#{SecureRandom.hex(4)}"
+  # end
+
   include Rodauth::Model(RodauthMain)
+
+  validates :username, uniqueness: true
 
   has_many :game_players, dependent: :destroy, foreign_key: "player_id", class_name: "GamePlayer"
 

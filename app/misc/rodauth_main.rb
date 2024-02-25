@@ -139,9 +139,16 @@ class RodauthMain < Rodauth::Rails::Auth
 
     # ==> Hooks
     # Validate custom fields in the create account form.
-    # before_create_account do
-    #   throw_error_status(422, "name", "must be present") if param("name").empty?
-    # end
+    before_create_account do
+      loop do
+        username = "user-#{SecureRandom.hex(4)}"
+
+        self.account[:username] = username
+        break if Account.where(username: username).none? # Check if the username is unique
+    
+        # If the username is not unique, generate a new one and retry
+      end
+    end
 
     # Perform additional actions after the account is created.
     # after_create_account do

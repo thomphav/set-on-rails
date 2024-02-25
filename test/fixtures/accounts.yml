@@ -6,6 +6,7 @@
 #  status        :integer          default("unverified"), not null
 #  email         :citext           not null
 #  password_hash :string
+#  username      :string
 #
 one:
   email: freddie@queen.com

@@ -6,7 +6,6 @@ import useCable from "../hooks/use_cable";
 
 enum RECEIVER_ACTIONS {
   add = 'add',
-  addAll = 'add_all',
   update = 'update',
   remove = 'remove'
 }
@@ -17,12 +16,11 @@ interface LobbyChannelData {
   games?: game[]
 }
 
-const Home = () => {
-  const [games, setGames] = useState<game[]>([]);
+const Home = ({ initialGames }: { initialGames: game[] }) => {
+  const [games, setGames] = useState<game[]>(initialGames);
 
   const onReceived = (data: LobbyChannelData) => {
   if (data.action === RECEIVER_ACTIONS.add && data.game) setGames((prevGames: game[]) => [data.game, ...prevGames])
-  if (data.action === RECEIVER_ACTIONS.addAll && data.games) setGames(data.games)
   if (data.action === RECEIVER_ACTIONS.remove && data.game) setGames((prevGames: game[]) => prevGames.filter((game: game) => game.id !== data.game.id))
   }
 

@@ -43,13 +43,13 @@ class Game < ApplicationRecord
   end
 
   def leaderboard
-    # REFACTOR with sql
-    game_players.map do |gp|
-      {
-        email: gp.player.email,
-        score: gp.score
-      }
-    end
+    @leaderboard ||=
+      game_players
+        .all
+        .joins(:player)
+        .distinct
+        .order(score: :desc)
+        .select(:score, "accounts.email AS email")
   end
 
   def as_json(options = {})

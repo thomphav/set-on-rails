@@ -50,7 +50,7 @@ const Game = ({ game, gameCards, initialGameOver, numOfCardsInDeck, initialLeade
   };
 
   const handleSelect = (id: number) => {
-    if (selected.find((sid: number) => sid === id)) {
+    if (selected.some((sid: number) => sid === id)) {
       setSelected((prevSelected: number[]) => prevSelected.filter((psid: number) => psid !== id));
     } else {
       setSelected((prevSelected: number[]) => [...prevSelected, id]);

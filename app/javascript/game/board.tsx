@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { SvgDefs } from "./svg_defs";
 import { game, gameCard } from "../common_types/types";
+import { keyCardMapping } from "./utils";
 
 interface BoardProps {
   cards: gameCard[];
@@ -19,7 +20,7 @@ const Board = ({
   selected,
   handleSelect,
   isASet,
-  notASet
+  notASet,
 }: BoardProps) => {
   interface GameCardProps {
     gameCard: gameCard;
@@ -30,7 +31,6 @@ const Board = ({
 
   const GameCard = ({ gameCard, handleSelect, selected, gameOver }: GameCardProps) => (
     <button
-      key={gameCard.id}
       onClick={() => handleSelect(gameCard.id)}
       disabled={gameOver}
       className={
@@ -53,6 +53,26 @@ const Board = ({
       ))}
     </button>
   )
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const cardsLength = cards.length;
+
+      const cardIndex = keyCardMapping[event.key as keyof typeof keyCardMapping];
+
+      if (cardIndex > cardsLength - 1) return;
+
+      if (cardIndex !== undefined) {
+        handleSelect(cards[cardIndex].id);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selected]);
 
   return (
     <div className="flex flex-col items-center space-y-8">

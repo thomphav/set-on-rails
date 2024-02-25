@@ -12,16 +12,28 @@ enum RECEIVER_ACTIONS {
 
 interface LobbyChannelData {
   action: string
+  game_id?: number
   game?: game
   games?: game[]
+  room_count?: number
 }
 
 const Home = ({ initialGames }: { initialGames: game[] }) => {
   const [games, setGames] = useState<game[]>(initialGames);
 
   const onReceived = (data: LobbyChannelData) => {
-  if (data.action === RECEIVER_ACTIONS.add && data.game) setGames((prevGames: game[]) => [data.game, ...prevGames])
-  if (data.action === RECEIVER_ACTIONS.remove && data.game) setGames((prevGames: game[]) => prevGames.filter((game: game) => game.id !== data.game.id))
+    if (data.action === RECEIVER_ACTIONS.add && data.game) setGames((prevGames: game[]) => [data.game, ...prevGames])
+    if (data.action === RECEIVER_ACTIONS.remove && data.game) setGames((prevGames: game[]) => prevGames.filter((game: game) => game.id !== data.game.id))
+
+    console.log(data)
+    if (data.game_id && data.room_count !== undefined) {
+      setGames((prevGames: game[]) => prevGames.map((game: game) => {
+        if (data.game_id && game.id === data.game_id) {
+          return { ...game, room_count: data.room_count }
+        }
+        return game
+      }))
+    }
   }
 
   useCable({ channel: 'ApplicationCable::LobbyChannel' }, onReceived);
@@ -39,8 +51,12 @@ const Home = ({ initialGames }: { initialGames: game[] }) => {
         <div className="flex justify-center w-2/3 h-full">
           <div className="flex flex-col space-y-3 h-full w-full items-center border border-gray-300 rounded p-3">
             {games.map((game: game) => (
-              <a key={game.id} href={`/games/${game.id}/room`} className="border border-gray-300 rounded w-full py-6 flex justify-center items-center hover:bg-gray-100">
-                Created {timeSince(game.created_at)}
+              <a
+                key={game.id} href={`/games/${game.id}/room`}
+                className="border border-gray-300 rounded w-full p-4 flex items-center hover:bg-gray-100 justify-between"
+              >
+                <span>Created {timeSince(game.created_at)}</span>
+                <span>Players: {game.room_count}</span>
               </a>
             ))}
           </div>

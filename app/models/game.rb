@@ -54,14 +54,15 @@ class Game < ApplicationRecord
 
   def as_json(options = {})
     super(options).merge({
-      start_time: start_time.nil? ? nil : start_time.to_i * 1000,
-      end_time: end_time.nil? ? nil : end_time.to_i * 1000,
-      created_at: created_at.to_i * 1000,
+      "start_time" => start_time.nil? ? nil : start_time.to_i * 1000,
+      "end_time" => end_time.nil? ? nil : end_time.to_i * 1000,
+      "created_at" => created_at.to_i * 1000,
     })
   end
 
   delegate :get_room,
            :get_room_accounts,
+           :get_room_count,
            :add_to_room,
            :remove_from_room,
            :clear_room,

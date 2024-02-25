@@ -19,6 +19,10 @@ class Game::Room
     Account.where(id: ids)
   end
 
+  def get_room_count
+    redis.hlen(redis_hash_key)
+  end
+
   def add_to_room(account:)
     account_key = "account:#{account.id}"
 

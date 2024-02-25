@@ -3,6 +3,7 @@ export interface game {
   start_time: number
   end_time: number
   created_at: number
+  room_count?: number
 }
 
 export interface gameCard {

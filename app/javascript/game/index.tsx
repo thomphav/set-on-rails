@@ -33,9 +33,7 @@ const Game = ({ currentAccountId, game, gameCards, initialGameOver, numOfCardsIn
   const [isASet, setIsASet] = useState<boolean>(false);
   const [notASet, setNotASet] = useState<boolean>(false);
   const [frozen, setFrozen] = useState<boolean>(false);
-
-  console.log("LEADERBOARD", leaderBoard)
-  console.log("CARDS", cards)
+  const [scorer, setScorer] = useState<number | null>(null);
 
   const handleSubmit = async () => {
     const token = setCsrfToken();
@@ -101,6 +99,7 @@ const Game = ({ currentAccountId, game, gameCards, initialGameOver, numOfCardsIn
       // if the user scored
       if (scorer_id === currentAccountId) {
         setIsASet(true);
+        setScorer(scorer_id);
 
         const timeout = setTimeout(() => {
           setCards(new_cards)
@@ -108,16 +107,19 @@ const Game = ({ currentAccountId, game, gameCards, initialGameOver, numOfCardsIn
           setLeaderBoard(leaderboard)
           setIsASet(false);
           setSelected([]);
+          setScorer(null);
         }, 300);
 
         () => clearTimeout(timeout);
       } else {
         setSelected([]);
+        setScorer(scorer_id);
 
         const timeout = setTimeout(() => {
           setCards(new_cards)
           setNumCardsInDeck(num_of_cards_in_deck)
           setLeaderBoard(leaderboard)
+          setScorer(null);
         }, 300);
 
         () => clearTimeout(timeout);
@@ -159,10 +161,10 @@ const Game = ({ currentAccountId, game, gameCards, initialGameOver, numOfCardsIn
           <div className="flex flex-col space-y-2 p-2">
             {leaderBoard?.map((player: Player, index: number) => (
               <div key={player.id} className='flex space-x-2.5 w-full'>
-                <div className='flex justify-center border border-gray-100 bg-gray-100 text-gray-500 rounded-md p-3 w-[50px]'>
+                <div className={`flex justify-center border border-gray-100 bg-gray-100 text-gray-500 rounded-md p-3 w-[50px] ${(scorer === player.id) ? "bg-green-200" : ""}`}>
                   {index + 1}
                 </div>
-                <div className="flex border border-gray-300 rounded-md p-3 w-full justify-between">
+                <div className={`flex border border-gray-300 rounded-md p-3 w-full justify-between ${(scorer === player.id) ? "bg-green-200" : ""}`}>
                   <span>{player.username}</span>
                   <span>{player.score}</span>
                 </div>

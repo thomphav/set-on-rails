@@ -49,7 +49,7 @@ class Game < ApplicationRecord
         .joins(:player)
         .distinct
         .order(score: :desc)
-        .select(:id, :score, "accounts.username AS username")
+        .select("accounts.id AS id", :score, "accounts.username AS username")
   end
 
   def as_json(options = {})

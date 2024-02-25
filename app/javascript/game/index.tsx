@@ -6,6 +6,7 @@ import { setCsrfToken } from '../utils';
 import useCable from '../hooks/use_cable';
 
 interface GameProps {
+  currentAccountId: number;
   game: game;
   gameCards: gameCard[];
   initialGameOver: boolean;
@@ -20,9 +21,10 @@ interface checkForSetResponse {
   game_over: boolean;
   num_of_cards_in_deck: number;
   leaderboard: Player[];
+  scorer_id: number;
 }
 
-const Game = ({ game, gameCards, initialGameOver, numOfCardsInDeck, initialLeaderboard }: GameProps) => {
+const Game = ({ currentAccountId, game, gameCards, initialGameOver, numOfCardsInDeck, initialLeaderboard }: GameProps) => {
   const [gameOver, setGameOver] = useState<boolean>(initialGameOver);
   const [leaderBoard, setLeaderBoard] = useState<Player[]>(initialLeaderboard);
   const [selected, setSelected] = useState<number[]>([]);
@@ -30,12 +32,14 @@ const Game = ({ game, gameCards, initialGameOver, numOfCardsInDeck, initialLeade
   const [numCardsInDeck, setNumCardsInDeck] = useState<number>(numOfCardsInDeck)
   const [isASet, setIsASet] = useState<boolean>(false);
   const [notASet, setNotASet] = useState<boolean>(false);
+  const [frozen, setFrozen] = useState<boolean>(false);
 
   const handleSubmit = async () => {
     const token = setCsrfToken();
   
     try {
-      await fetch(`/internal_api/games/check_for_set`, {
+      // change any type...
+      const response: Response = await fetch(`/internal_api/games/check_for_set`, {
         method: 'POST',
         headers: {
           "X-Requested-With": "XMLHttpRequest",
@@ -44,6 +48,23 @@ const Game = ({ game, gameCards, initialGameOver, numOfCardsInDeck, initialLeade
         },
         body: JSON.stringify({ game_id: game.id, ids: selected })
       })
+
+      const result: boolean = await response.json();
+
+      // handle false response locally - no need to broadcast to others
+      if (!result) {
+        setFrozen(true);
+        setNotASet(true);
+
+        const timeout = setTimeout(() => {
+          setNotASet(false);
+          setSelected([]);
+        }, 300);
+
+        () => clearTimeout(timeout);
+
+        setFrozen(false);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -58,31 +79,48 @@ const Game = ({ game, gameCards, initialGameOver, numOfCardsInDeck, initialLeade
   };
 
   const onReceived = (data: checkForSetResponse) => {
-    if (data.game_over) {
+    const {
+      result,
+      game_over,
+      new_cards,
+      num_of_cards_in_deck,
+      scorer_id,
+      leaderboard
+    } = data;
+
+    if (game_over) {
       setGameOver(true);
     }
 
-    if (data.result) {
-      setIsASet(true);
+    if (result) {
+      setFrozen(true);
 
-      const timeout = setTimeout(() => {
-        setCards(data.new_cards)
-        setNumCardsInDeck(data.num_of_cards_in_deck)
-        setLeaderBoard(data.leaderboard)
-        setIsASet(false);
+      // if the user scored
+      if (scorer_id === currentAccountId) {
+        setIsASet(true);
+
+        const timeout = setTimeout(() => {
+          setCards(new_cards)
+          setNumCardsInDeck(num_of_cards_in_deck)
+          setLeaderBoard(leaderboard)
+          setIsASet(false);
+          setSelected([]);
+        }, 300);
+
+        () => clearTimeout(timeout);
+      } else {
         setSelected([]);
-      }, 300);
 
-      return () => clearTimeout(timeout);
-    } else {
-      setNotASet(true);
+        const timeout = setTimeout(() => {
+          setCards(new_cards)
+          setNumCardsInDeck(num_of_cards_in_deck)
+          setLeaderBoard(leaderboard)
+        }, 300);
 
-      const timeout = setTimeout(() => {
-        setNotASet(false);
-        setSelected([]);
-      }, 300);
+        () => clearTimeout(timeout);
+      }
 
-      return () => clearTimeout(timeout);
+      setFrozen(false);
     }
   }
 
@@ -108,6 +146,7 @@ const Game = ({ game, gameCards, initialGameOver, numOfCardsInDeck, initialLeade
           handleSelect={handleSelect}
           isASet={isASet}
           notASet={notASet}
+          frozen={frozen}
         />
       </div>
 

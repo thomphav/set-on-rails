@@ -8,12 +8,13 @@ interface GameCardProps {
   gameOver: boolean;
   isASet: boolean;
   notASet: boolean;
+  frozen: boolean;
 }
 
-const GameCard = ({ gameCard, handleSelect, selected, gameOver, isASet, notASet }: GameCardProps) => (
+const GameCard = ({ gameCard, handleSelect, selected, gameOver, isASet, notASet, frozen }: GameCardProps) => (
   <button
     onClick={() => handleSelect(gameCard.id)}
-    disabled={selected.length === 3 || gameOver}
+    disabled={frozen || selected.length === 3 || gameOver}
     className={
                 `flex justify-center items-center border-2 rounded-md w-[175px] h-[105px]
                 ${notASet && selected.find((id) => id === gameCard.id) && "border-4 border-red-500 transition-colors duration-500"}

@@ -1,4 +1,5 @@
 <%= render GameMod::ShowComponent.new(
+  currentAccountId: current_account.id,
   game: @game,
   gameCards: @game_cards,
   initialGameOver: @game_over,

@@ -12,6 +12,7 @@ interface BoardProps {
   handleSelect: (id: number) => void;
   isASet: boolean;
   notASet: boolean;
+  frozen: boolean;
 }
 
 const Board = ({
@@ -22,6 +23,7 @@ const Board = ({
   handleSelect,
   isASet,
   notASet,
+  frozen
 }: BoardProps) => {
 
   useEffect(() => {
@@ -30,7 +32,7 @@ const Board = ({
       const cardIndex = keyCardMapping[event.key as keyof typeof keyCardMapping];
 
       if (cardIndex > cardsLength - 1) return;
-      if (selected.length === 3 || gameOver) return;
+      if (frozen || selected.length === 3 || gameOver) return;
 
       if (cardIndex !== undefined) handleSelect(cards[cardIndex].id);
     };
@@ -56,6 +58,7 @@ const Board = ({
             gameOver={gameOver}
             isASet={isASet}
             notASet={notASet}
+            frozen={frozen}
           />
         ))}
       </div>

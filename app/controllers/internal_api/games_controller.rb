@@ -47,12 +47,13 @@ class InternalApi::GamesController < ApplicationController
       three_cards: three_cards,
       game_over: game_over,
       num_of_cards_in_deck: num_of_cards_in_deck,
-      leaderboard: game.leaderboard
+      leaderboard: game.leaderboard,
+      scorer_id: result ? current_account.id : nil,
     }
 
     ActionCable.server.broadcast("game_#{game.id}", data.to_json)
 
-    render json: data, status: :ok
+    render json: result, status: :ok
   rescue StandardError => e
     Rails.logger.error("Error checking for set: #{e}")
     render json: { error: e }, status: :unprocessable_entity

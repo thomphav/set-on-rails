@@ -40,23 +40,25 @@ const Home = ({ initialGames }: { initialGames: game[] }) => {
 
   return (
     <>
-      <div className="flex w-full h-full items-center px-36 py-24 space-x-48">
-        <div className="flex w-1/3 h-full items-center justify-center">
+      <div className="flex w-full h-full items-center p-24 space-x-24">
+        <div className="flex h-full items-center justify-center w-[320px] max-w-[380px] min-w-[380px]">
           <form className="flex flex-col justify-center items-center mx-auto space-y-16" action="/games" method="post">
-            <h1 className="text-6xl">Let's play Set!</h1>
+            <h1 className="text-4xl">
+              <span className="text-purple-600 font-medium">9</span> Players Online
+            </h1>
             <CsrfInput />
-            <button className="border border-gray-300 py-4 px-28 w-fit text-3xl rounded-md hover:bg-gray-50" type="submit">New Game</button>
+            <button className="border border-gray-300 py-4 px-6 w-full text-xl rounded-md hover:bg-gray-50" type="submit">Create New Game</button>
           </form>
         </div>
-        <div className="flex justify-center w-2/3 h-full">
-          <div className="flex flex-col space-y-3 h-full w-full items-center border border-gray-300 rounded p-3">
+        <div className="flex justify-center w-full h-full">
+          <div className="flex flex-col space-y-2 h-full w-full items-center border border-gray-200 rounded p-2 overflow-y-scroll">
             {games.map((game: game) => (
               <a
                 key={game.id} href={`/games/${game.id}/room`}
-                className="border border-gray-300 rounded w-full p-4 flex items-center hover:bg-gray-100 justify-between"
+                className="border border-gray-200 rounded w-full p-4 flex items-center hover:bg-gray-100 justify-between"
               >
-                <span>Created {timeSince(game.created_at)}</span>
                 <span>Players: {game.room_count}</span>
+                <span>Created {timeSince(game.created_at)}</span>
               </a>
             ))}
           </div>

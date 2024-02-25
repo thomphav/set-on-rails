@@ -52,15 +52,21 @@ const Home = ({ initialGames }: { initialGames: game[] }) => {
         </div>
         <div className="flex justify-center w-full h-full">
           <div className="flex flex-col space-y-2 h-full w-full items-center border border-gray-200 rounded p-2 overflow-y-scroll">
-            {games.map((game: game) => (
-              <a
-                key={game.id} href={`/games/${game.id}/room`}
-                className="border border-gray-200 rounded w-full p-4 flex items-center hover:bg-gray-100 justify-between"
-              >
-                <span>Players: {game.room_count}</span>
-                <span>Created {timeSince(game.created_at)}</span>
-              </a>
-            ))}
+            {games.length === 0 ?
+              <div className="flex h-full items-center">
+                <p className="text-lg">No games are live at the moment</p>
+              </div>
+            :
+              games.map((game: game) => (
+                <a
+                  key={game.id} href={`/games/${game.id}/room`}
+                  className="border border-gray-200 rounded w-full p-4 flex items-center hover:bg-gray-100 justify-between"
+                >
+                  <span>Players: {game.room_count}</span>
+                  <span>Created {timeSince(game.created_at)}</span>
+                </a>
+              ))
+            }
           </div>
         </div>
       </div>

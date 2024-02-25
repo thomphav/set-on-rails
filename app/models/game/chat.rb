@@ -1,7 +1,13 @@
 class Game::Chat
   attr_reader :game
 
-  MESSAGE_DATA = Struct.new(:account_id, :account_email, :message, :sent_at)
+  MESSAGE_DATA = Struct.new(
+    :account_id,
+    :account_email,
+    :account_username,
+    :message,
+    :sent_at
+  )
   
   def initialize(game:)
     raise ArgumentError, "Must include a valid Game" unless game.is_a?(Game)
@@ -19,6 +25,7 @@ class Game::Chat
     message = MESSAGE_DATA.new(
       account_id: account.id,
       account_email: account.email,
+      account_username: account.username,
       message: message,
       sent_at: Time.current.to_i,
     )

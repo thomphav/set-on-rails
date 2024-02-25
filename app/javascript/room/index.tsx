@@ -6,6 +6,7 @@ import { setCsrfToken } from '../utils';
 interface Message {
   account_id: number;
   account_email: string;
+  account_username: string;
   message: string;
   sent_at: string;
 }
@@ -99,7 +100,7 @@ const Room = ({ currentAccountId, game, chat }: { currentAccountId: number, game
                     {index + 1}
                   </div>
                   <div className='flex border border-gray-300 rounded-md p-3 w-full'>
-                    <span>{player.email}</span>
+                    <span>{player.username}</span>
                   </div>
                 </div>
               ))}
@@ -115,7 +116,7 @@ const Room = ({ currentAccountId, game, chat }: { currentAccountId: number, game
               <div id="scrollableContainer" className='flex flex-col h-full w-full max-h-[500px] overflow-y-scroll'>
                 {messages.map((message, index) => (
                   <div key={index} className='w-full py-1'>
-                    <span className='break-words font-bold inline'>{message.account_email}</span>
+                    <span className='break-words font-bold inline'>{message.account_username}</span>
                     <span className='break-words inline'>: {message.message}</span>
                   </div>
                 ))}

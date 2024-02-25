@@ -34,6 +34,9 @@ const Game = ({ currentAccountId, game, gameCards, initialGameOver, numOfCardsIn
   const [notASet, setNotASet] = useState<boolean>(false);
   const [frozen, setFrozen] = useState<boolean>(false);
 
+  console.log("LEADERBOARD", leaderBoard)
+  console.log("CARDS", cards)
+
   const handleSubmit = async () => {
     const token = setCsrfToken();
   
@@ -160,7 +163,7 @@ const Game = ({ currentAccountId, game, gameCards, initialGameOver, numOfCardsIn
                   {index + 1}
                 </div>
                 <div className="flex border border-gray-300 rounded-md p-3 w-full justify-between">
-                  <span>{player.email}</span>
+                  <span>{player.username}</span>
                   <span>{player.score}</span>
                 </div>
               </div>

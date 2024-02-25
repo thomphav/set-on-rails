@@ -27,8 +27,9 @@ class Game::Room
     account_key = "account:#{account.id}"
 
     account_data = {
-        id: account.id,
-        email: account.email,
+      id: account.id,
+      email: account.email,
+      username: account.username,
     }.to_json
 
     redis.hset(redis_hash_key, account_key, account_data)

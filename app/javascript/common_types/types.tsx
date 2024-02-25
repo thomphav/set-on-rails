@@ -17,10 +17,11 @@ export interface gameCard {
 export interface RoomPlayer {
   id: number
   email: string
+  username: string
 }
 
 export interface Player {
   id: number
-  email: string
+  username: string
   score?: number
 }

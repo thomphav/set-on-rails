@@ -28,7 +28,7 @@ module Game::GameLogic
 
       unless set_on_board
         game_over = draw.empty?
-        return if game_over
+        break if game_over
 
         three_cards = draw
         three_cards.each_with_index { |gc, index| gc.update!(state: :drawn, position: drawn_cards.length + index) }

@@ -49,6 +49,7 @@ class InternalApi::GamesController < ApplicationController
       num_of_cards_in_deck: num_of_cards_in_deck,
       leaderboard: game.leaderboard,
       scorer_id: result ? current_account.id : nil,
+      end_time: game.end_time ? game.end_time&.to_i * 1000 : nil
     }
 
     ActionCable.server.broadcast("game_#{game.id}", data.to_json)

@@ -22,6 +22,7 @@ interface checkForSetResponse {
   num_of_cards_in_deck: number;
   leaderboard: Player[];
   scorer_id: number;
+  end_time: number;
 }
 
 const Game = ({ currentAccountId, game, gameCards, initialGameOver, numOfCardsInDeck, initialLeaderboard }: GameProps) => {
@@ -34,6 +35,7 @@ const Game = ({ currentAccountId, game, gameCards, initialGameOver, numOfCardsIn
   const [notASet, setNotASet] = useState<boolean>(false);
   const [frozen, setFrozen] = useState<boolean>(false);
   const [scorer, setScorer] = useState<number | null>(null);
+  const [endTime, setEndTime] = useState<number>(game.end_time);
 
   const handleSubmit = async () => {
     const token = setCsrfToken();
@@ -86,12 +88,12 @@ const Game = ({ currentAccountId, game, gameCards, initialGameOver, numOfCardsIn
       new_cards,
       num_of_cards_in_deck,
       scorer_id,
-      leaderboard
+      leaderboard,
+      end_time
     } = data;
 
-    if (game_over) {
-      setGameOver(true);
-    }
+    if (game_over) setGameOver(true);
+    if (end_time) setEndTime(end_time);
 
     if (result) {
       setFrozen(true);
@@ -142,6 +144,7 @@ const Game = ({ currentAccountId, game, gameCards, initialGameOver, numOfCardsIn
         <Timer
           game={game}
           gameOver={gameOver}
+          endTime={endTime}
         />
         <Board
           cards={cards}

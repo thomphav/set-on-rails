@@ -92,6 +92,14 @@ const Game = ({
     }
   };
 
+  const checkForGameOver = (game_over: boolean, end_time: number) => {
+    if (game_over) {
+      setGameOver(true);
+      setGameOverModalOpen(true);
+      if (end_time) setEndTime(end_time);
+    }
+  }
+
   const onReceived = (data: checkForSetResponse) => {
     const {
       result,
@@ -102,12 +110,6 @@ const Game = ({
       leaderboard,
       end_time
     } = data;
-
-    if (game_over) {
-      setGameOver(true);
-      setGameOverModalOpen(true);
-    }
-    if (end_time) setEndTime(end_time);
 
     if (result) {
       setFrozen(true);
@@ -121,9 +123,12 @@ const Game = ({
           setCards(new_cards)
           setNumCardsInDeck(num_of_cards_in_deck)
           setLeaderBoard(leaderboard)
+          setScorer(null);
+
           setIsASet(false);
           setSelected([]);
-          setScorer(null);
+
+          checkForGameOver(game_over, end_time);
         }, 300);
 
         () => clearTimeout(timeout);
@@ -136,6 +141,8 @@ const Game = ({
           setNumCardsInDeck(num_of_cards_in_deck)
           setLeaderBoard(leaderboard)
           setScorer(null);
+
+          checkForGameOver(game_over, end_time);
         }, 300);
 
         () => clearTimeout(timeout);
@@ -160,7 +167,7 @@ const Game = ({
 
             <div className="flex flex-col space-y-4 w-full items-center">
               <h2 className="mx-auto text-3xl">Game Over</h2>
-              <span>Winner: <span className="font-medium">USERNAME</span></span>
+              <span>Winner: <span className="font-medium">{leaderBoard[0].username}</span></span>
             </div>
 
             <div className="flex flex-col space-y-2 w-full">

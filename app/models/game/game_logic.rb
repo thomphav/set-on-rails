@@ -72,6 +72,7 @@ module Game::GameLogic
 
       # eventually we'd want to rather count the specific CardSet records but this'll do for now
       player&.increment!(:score)
+      player&.update_last_score_at!
 
       game_cards.each { _1.update!(state: :used) }
 

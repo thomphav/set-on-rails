@@ -47,7 +47,6 @@ const Board = ({
   return (
     <div className="flex flex-col items-center space-y-8">
       <SvgDefs />
-      {gameOver && <h2 className="mx-auto text-3xl">Game Over</h2>}
       <div className="mx-auto grid grid-cols-3 gap-4">
         {cards.map((gameCard: gameCard) => (
           <GameCard

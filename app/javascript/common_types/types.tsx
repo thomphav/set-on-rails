@@ -4,6 +4,7 @@ export interface game {
   end_time: number
   created_at: number
   room_count?: number
+  players?: RoomPlayer[]
 }
 
 export interface gameCard {

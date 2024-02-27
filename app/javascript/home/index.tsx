@@ -25,7 +25,6 @@ const Home = ({ initialGames }: { initialGames: game[] }) => {
     if (data.action === RECEIVER_ACTIONS.add && data.game) setGames((prevGames: game[]) => [data.game, ...prevGames])
     if (data.action === RECEIVER_ACTIONS.remove && data.game) setGames((prevGames: game[]) => prevGames.filter((game: game) => game.id !== data.game.id))
 
-    console.log(data)
     if (data.game_id && data.room_count !== undefined) {
       setGames((prevGames: game[]) => prevGames.map((game: game) => {
         if (data.game_id && game.id === data.game_id) {
@@ -41,10 +40,10 @@ const Home = ({ initialGames }: { initialGames: game[] }) => {
   return (
     <>
       <div className="flex w-full h-full items-center p-24 space-x-24">
-        <div className="flex h-full items-center justify-center w-[320px] max-w-[380px] min-w-[380px]">
+        <div className="flex h-full items-center justify-center w-[380px] max-w-[380px] min-w-[380px]">
           <form className="flex flex-col justify-center items-center mx-auto space-y-16" action="/games" method="post">
             <h1 className="text-4xl">
-              <span className="text-purple-600 font-medium">9</span> Players Online
+              <span className="text-purple-600">9</span> Players Online
             </h1>
             <CsrfInput />
             <button className="border border-gray-300 py-4 px-6 w-full text-xl rounded-md hover:bg-gray-50" type="submit">Create New Game</button>

@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     end
   end
   resources :dashboard, only: [:index]
+  resources :profile, only: [:index]
 
   namespace :internal_api do
     resources :games, only: [:show, :update] do
@@ -26,6 +27,8 @@ Rails.application.routes.draw do
         end
       end
     end
+
+    resources :accounts, only: [:update]
   end
 
   # Routes handled by RodauthApp

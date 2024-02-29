@@ -43,7 +43,7 @@ const Profile = ({ id, initialUsername }: { id: number, initialUsername: string 
           {formState.username.toggle ?
             <form id="username-form" onSubmit={handleSubmit} className="flex flex-col space-y-8 w-full max-w-xs">
               <div className='flex flex-col space-y-2'>
-                <label className='font-bold' htmlFor='username'>Username</label>
+                <label className='font-bold text-xl' htmlFor='username'>Username</label>
                 <input
                   id="username"
                   name="username"

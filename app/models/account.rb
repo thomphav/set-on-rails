@@ -17,7 +17,7 @@ class Account < ApplicationRecord
 
   include Rodauth::Model(RodauthMain)
 
-  validates :username, uniqueness: true
+  validates :username, uniqueness: true, presence: true
 
   has_many :game_players, dependent: :destroy, foreign_key: "player_id", class_name: "GamePlayer"
 

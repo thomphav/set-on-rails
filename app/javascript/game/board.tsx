@@ -45,23 +45,25 @@ const Board = ({
   }, [selected]);
 
   return (
-    <div className="flex flex-col items-center space-y-8">
+    <div className="flex flex-col items-center">
       <SvgDefs />
-      <div className="mx-auto grid grid-cols-3 gap-4">
-        {cards.map((gameCard: gameCard) => (
-          <GameCard
-            key={gameCard.id}
-            gameCard={gameCard}
-            handleSelect={handleSelect}
-            selected={selected}
-            gameOver={gameOver}
-            isASet={isASet}
-            notASet={notASet}
-            frozen={frozen}
-          />
-        ))}
+      <div className="flex flex-col items-center space-y-8">
+        <div className="mx-auto grid grid-cols-3 gap-2 min-[420px]:gap-3 lg:gap-4">
+          {cards.map((gameCard: gameCard) => (
+            <GameCard
+              key={gameCard.id}
+              gameCard={gameCard}
+              handleSelect={handleSelect}
+              selected={selected}
+              gameOver={gameOver}
+              isASet={isASet}
+              notASet={notASet}
+              frozen={frozen}
+            />
+          ))}
+        </div>
+        <p><span className="text-purple-600 font-medium">{numCardsInDeck}</span> card{numCardsInDeck === 1 ? "" : "s"} in the deck</p>
       </div>
-      <h2>{numCardsInDeck} card{numCardsInDeck === 1 ? "" : "s"} in the deck</h2>
     </div>
   );
 };

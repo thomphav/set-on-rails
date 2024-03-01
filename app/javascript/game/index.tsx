@@ -178,8 +178,8 @@ const Game = ({
         </div>
       )}
 
-      <div className="flex w-full h-full px-36 py-24 space-x-16">
-        <div className="flex flex-col w-2/3 justify-center space-y-8 h-full border border-gray-300 rounded">
+      <div className="flex flex-col lg:flex-row w-full h-full px-8 py-8 lg:py-16 space-y-8 lg:space-y-0 lg:space-x-8">
+        <div className="flex flex-col w-full justify-start md:justify-center space-y-4 min-[420px]:space-y-6 lg:space-y-8 h-full min-w-[500px]">
           {gameOver && (
             <div className="flex w-full justify-center">
               <h2 className="text-center text-white p-3 rounded-md bg-purple-400 w-full max-w-[150px]">Game Over</h2>
@@ -201,7 +201,7 @@ const Game = ({
             frozen={frozen}
           />
         </div>
-        <div className='flex h-full w-1/3 border border-gray-300 rounded p-6'>
+        <div className='flex h-full w-full max-w-none lg:max-w-xl justify-center'>
           <LeaderBoard
             leaderBoard={leaderBoard}
             scorer={scorer}

@@ -32,18 +32,15 @@ const Profile = ({ id, initialUsername }: { id: number, initialUsername: string 
     }
   }
 
-  console.log("FSTATE", formState.username.value)
-  console.log("USERNAME", username)
-
   return (
-    <div className="flex flex-col w-full h-full p-24">
-      <div className="flex flex-col border border-gray-300 rounded h-full p-6 space-y-8">
-        <h1 className="text-3xl">Profile</h1>
-          <div className='flex justify-between w-full max-w-md'>
+    <div className="flex flex-col w-full h-full p-8 md:p-16">
+      <div className="flex flex-col border border-gray-300 rounded h-fit p-6 space-y-8">
+        <h1 className="text-2xl md:text-3xl">Profile</h1>
+          <div className='flex flex-col space-y-8 md:space-y-0 md:flex-row md:justify-between w-full max-w-md'>
           {formState.username.toggle ?
             <form id="username-form" onSubmit={handleSubmit} className="flex flex-col space-y-8 w-full max-w-xs">
               <div className='flex flex-col space-y-2'>
-                <label className='font-bold text-xl' htmlFor='username'>Username</label>
+                <label className='font-bold text-lg md:text-xl' htmlFor='username'>Username</label>
                 <input
                   id="username"
                   name="username"
@@ -53,8 +50,8 @@ const Profile = ({ id, initialUsername }: { id: number, initialUsername: string 
                 />
               </div>
               <button
-                className={`px-5 py-2 h-fit bg-purple-500 hover:bg-purple-400 text-white rounded
-                            ${(formState.username.value === username || formState.username.value === '') ? 'bg-purple-200 hover:bg-purple-200' : ''}`}
+                className={`px-5 py-2 h-fit bg-gray-500 hover:bg-gray-400 text-white rounded
+                            ${(formState.username.value === username || formState.username.value === '') ? 'bg-gray-200 hover:bg-gray-200' : ''}`}
                 type='submit'
                 disabled={formState.username.value === username || formState.username.value === ''}
               >
@@ -63,13 +60,13 @@ const Profile = ({ id, initialUsername }: { id: number, initialUsername: string 
             </form>
           :
             <div className="flex flex-col space-y-2">
-              <p className="font-bold text-xl">Username</p>
+              <p className="font-bold text-lg md:text-xl">Username</p>
               <p className="text-gray-500">{username}</p>
             </div>
-        }
+          }
             <button 
               onClick={() => setFormState((prevState) => ({...prevState, username: {...prevState.username, toggle: !prevState.username.toggle}}))}
-              className='px-5 py-2 h-fit bg-purple-500 hover:bg-purple-400 text-white rounded'
+              className='px-5 py-2 h-fit w-fit bg-purple-500 hover:bg-purple-400 text-white rounded'
             >
               {formState.username.toggle ? "Cancel" : "Edit"}
             </button>

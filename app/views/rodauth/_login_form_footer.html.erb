@@ -1,6 +1,9 @@
 <% unless rodauth.login_form_footer_links.empty? %>
   <ul class="w-full">
+    <% counter = 0 %>
     <% rodauth.login_form_footer_links.sort.each do |_, link, text| %>
+      <% break if counter > 0 %>
+      <% counter += 1 %>
       <li><%= link_to text, link, class: "text-blue-500 rounded-sm text-sm hover:underline hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600" %></li>
     <% end %>
   </ul>

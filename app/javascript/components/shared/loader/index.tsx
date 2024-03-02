@@ -1,5 +1,4 @@
 import React from 'react';
-import './index.css';
 
 export enum LoaderColors {
   black = "black",
@@ -7,7 +6,7 @@ export enum LoaderColors {
 }
 
 const Loader = ({ color }: { color?: LoaderColors }) => (
-  <div className="loader flex items-center justify-center">
+  <div className="flex items-center justify-center animate-spin">
     <svg
       height="21"
       viewBox="0 0 21 21"

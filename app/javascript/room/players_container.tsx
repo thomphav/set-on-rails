@@ -18,7 +18,7 @@ const PlayersContainer = ({ room, handleStart, isLoading }: { room: RoomPlayer[]
       className="flex justify-center border-2 border-purple-500 bg-purple-500 hover:border-purple-400 hover:bg-purple-400 text-white rounded p-3 lg:p-4"
       onClick={handleStart}
     >
-      {isLoading ? <Loader color={LoaderColors.white}/> : "Start Game"}
+      {!isLoading ? <Loader color={LoaderColors.white}/> : "Start Game"}
     </button>
   </div>
 )

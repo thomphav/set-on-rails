@@ -8,11 +8,13 @@ import PlayersContainer from './players_container';
 const Room = ({ currentAccountId, game, chat }: { currentAccountId: number, game: game, chat: Message[] }) => {
   const [room, setRoom] = useState<RoomPlayer[]>([]);
   const [messages, setMessages] = useState<Message[]>(chat);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleStart = async () => {
     const token = setCsrfToken();
 
     try {
+      setIsLoading(true);
       await fetch(`/internal_api/games/start`, {
         method: 'POST',
         headers: {
@@ -24,6 +26,8 @@ const Room = ({ currentAccountId, game, chat }: { currentAccountId: number, game
       })
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -83,7 +87,7 @@ const Room = ({ currentAccountId, game, chat }: { currentAccountId: number, game
   return (
     <>
       <div className="flex flex-col overflow-y-scroll lg:flex-row w-full h-full items-center px-8 py-8 sm:px-16 sm:py-26 space-y-8 space-x-0 lg:space-x-16 lg:space-y-0">
-        <PlayersContainer room={room} handleStart={handleStart}/>
+        <PlayersContainer room={room} handleStart={handleStart} isLoading={isLoading}/>
         <Chat messages={messages} handleSend={handleSend}/>
       </div>
     </>

@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState } from 'react'
 import { setCsrfToken } from '../utils'
+import Loader, { LoaderColors } from '../components/shared/loader'
 
 const Profile = ({ id, initialUsername }: { id: number, initialUsername: string }) => {
   const [username, setUsername] = useState(initialUsername)
@@ -9,11 +10,15 @@ const Profile = ({ id, initialUsername }: { id: number, initialUsername: string 
       value: username
     }
   })
+  const [isLoading, setIsLoading] = useState(false)
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const token = setCsrfToken();
     
     try {
+      setIsLoading(true)
+
       const response = await fetch(`/internal_api/accounts/${id}`, {
         method: 'PATCH',
         headers: {
@@ -29,6 +34,8 @@ const Profile = ({ id, initialUsername }: { id: number, initialUsername: string 
       setFormState((prevState) => ({...prevState, username: {...prevState.username, toggle: false}}))
     } catch (error) {
       console.error(error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -50,12 +57,12 @@ const Profile = ({ id, initialUsername }: { id: number, initialUsername: string 
                 />
               </div>
               <button
-                className={`px-5 py-2 h-fit bg-gray-500 hover:bg-gray-400 text-white rounded
+                className={`flex justify-center px-5 py-2 h-fit bg-gray-500 hover:bg-gray-400 text-white text-center rounded
                             ${(formState.username.value === username || formState.username.value === '') ? 'bg-gray-200 hover:bg-gray-200' : ''}`}
                 type='submit'
                 disabled={formState.username.value === username || formState.username.value === ''}
               >
-                Save
+                {isLoading ? <Loader color={LoaderColors.white}/> : "Save"}
               </button>
             </form>
           :

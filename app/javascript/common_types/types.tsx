@@ -26,3 +26,11 @@ export interface Player {
   username: string
   score?: number
 }
+
+export interface Message {
+  account_id: number;
+  account_email: string;
+  account_username: string;
+  message: string;
+  sent_at: string;
+}

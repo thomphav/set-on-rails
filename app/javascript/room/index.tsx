@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import useCable from '../hooks/use_cable';
-import { game, RoomPlayer } from '../common_types/types';
+import { game, RoomPlayer, Message } from '../common_types/types';
 import { setCsrfToken } from '../utils';
-
-interface Message {
-  account_id: number;
-  account_email: string;
-  account_username: string;
-  message: string;
-  sent_at: string;
-}
+import Chat from './chat';
+import PlayersContainer from './players_container';
 
 const Room = ({ currentAccountId, game, chat }: { currentAccountId: number, game: game, chat: Message[] }) => {
   const [room, setRoom] = useState<RoomPlayer[]>([]);
@@ -88,48 +82,9 @@ const Room = ({ currentAccountId, game, chat }: { currentAccountId: number, game
 
   return (
     <>
-      <div className="flex w-full h-full items-center px-36 py-24 space-x-16">
-
-        <div className='flex flex-col w-2/3 h-full border border-gray-300 rounded justify-between p-6'>
-          <div className='flex flex-col h-full w-full space-y-8'>
-            <h2 className='text-3xl'>Players</h2>
-            <div className='flex flex-col space-y-4 w-full'>
-              {room.map((player: RoomPlayer, index: number) => (
-                <div key={player.id} className='flex space-x-2.5 w-full'>
-                  <div className='flex justify-center border border-gray-100 bg-gray-100 text-gray-500 rounded-md p-3 w-[50px]'>
-                    {index + 1}
-                  </div>
-                  <div className='flex border border-gray-300 rounded-md p-3 w-full'>
-                    <span>{player.username}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <button className="border-2 border-purple-500 bg-purple-500 hover:border-purple-400 hover:bg-purple-400 text-white rounded p-4" onClick={handleStart}>Start Game</button>
-        </div>
-
-        <div className='flex h-full w-1/3 border border-gray-300 rounded p-6'>
-          <div className='flex flex-col h-full w-full space-y-8'>
-            <h2 className='text-3xl'>Chat</h2>
-            <div className='flex flex-col h-full w-full justify-end'>
-              <div id="scrollableContainer" className='flex flex-col h-full w-full max-h-[500px] overflow-y-scroll'>
-                {messages.map((message, index) => (
-                  <div key={index} className='w-full py-1'>
-                    <span className='break-words font-bold inline'>{message.account_username}</span>
-                    <span className='break-words inline'>: {message.message}</span>
-                  </div>
-                ))}
-              </div>
-
-              <form className='flex space-x-4' onSubmit={(e) => handleSend(e)}>
-                <input name="message" className='border w-full p-2'/>
-                <button type="submit" className="border-2 border-gray-500 bg-gray-500 hover:border-gray-400 hover:bg-gray-400 text-white rounded p-2 w-[120px]">Send</button>
-              </form>
-            </div>
-          </div>
-        </div>
-
+      <div className="flex flex-col overflow-y-scroll lg:flex-row w-full h-full items-center px-8 py-8 sm:px-16 sm:py-26 space-y-8 space-x-0 lg:space-x-16 lg:space-y-0">
+        <PlayersContainer room={room} handleStart={handleStart}/>
+        <Chat messages={messages} handleSend={handleSend}/>
       </div>
     </>
   )

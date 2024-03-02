@@ -1,9 +1,9 @@
 <%= form_with url: rodauth.logout_path, method: :post, data: { turbo: false }, class: "hidden md:flex w-full max-w-sm" do |form| %>
-  <% if rodauth.features.include?(:active_sessions) %>
-    <div class="mb-6 flex items-center space-x-2">
+  <%# <% if rodauth.features.include?(:active_sessions) %>
+    <%# <div class="mb-6 flex items-center space-x-2">
       <%= form.check_box rodauth.global_logout_param, id: "global-logout", class: "rounded", include_hidden: false %>
-      <%= form.label "global-logout", rodauth.global_logout_label, class: "text-sm" %>
-    </div>
+      <%# <%= form.label "global-logout", rodauth.global_logout_label, class: "text-sm" %>
+    <%# </div>
   <% end %>
 
   <%= form.submit rodauth.logout_button, class: "w-full px-6 py-2 cursor-pointer font-semibold text-sm rounded-md bg-purple-300 hover:bg-purple-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-300" %>

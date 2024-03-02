@@ -26,4 +26,8 @@ class Account < ApplicationRecord
   # create validation 1 game player per unique game
 
   enum :status, unverified: 1, verified: 2, closed: 3
+
+  def self.players_online_count
+    Account::ActiveSessionKey.count
+  end
 end

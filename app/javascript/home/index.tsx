@@ -18,7 +18,7 @@ interface LobbyChannelData {
   room_count?: number
 }
 
-const Home = ({ initialGames }: { initialGames: game[] }) => {
+const Home = ({ playersOnline, initialGames }: { playersOnline: number, initialGames: game[] }) => {
   const [games, setGames] = useState<game[]>(initialGames);
 
   const onReceived = (data: LobbyChannelData) => {
@@ -43,7 +43,7 @@ const Home = ({ initialGames }: { initialGames: game[] }) => {
         <div className="flex h-fit lg:h-full items-center justify-center w-full lg:w-[380px] lg:max-w-[380px] lg:min-w-[380px]">
           <form className="flex flex-col sm:flex-row lg:flex-col w-full justify-between lg:justify-center items-center mx-auto space-y-8 space-x-0 sm:space-y-0 sm:space-x-16 lg:space-y-16 lg:space-x-0" action="/games" method="post">
             <h1 className="text-3xl lg:text-4xl">
-              <span className="text-purple-600">9</span> Players Online
+              <span className="text-purple-600">{playersOnline}</span> Players Online
             </h1>
             <CsrfInput />
             <button className="border border-gray-300 py-4 px-6 w-full max-w-[200px] lg:max-w-full text-base lg:text-xl rounded-md hover:bg-gray-50" type="submit">Create New Game</button>

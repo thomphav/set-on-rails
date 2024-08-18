@@ -43,27 +43,17 @@ module Game::GameLogic
   end
 
   def set_from_cards?(game_cards: [])
-    return false if game_cards.length != 3
+    return false unless game_cards.length == 3
 
-    set = true
+    Card::FEATURES.each do |feature|
+      values = game_cards.map { |card| card.try(feature) }
 
-    Card::FEATURES.each do |set_attr|
-      diff = game_cards[1].try(set_attr) != game_cards[0].try(set_attr)
-
-      if diff
-        if game_cards[2].try(set_attr) == game_cards[1].try(set_attr) || game_cards[2].try(set_attr) == game_cards[0].try(set_attr)
-          set = false
-          break
-        end
-      else
-        if game_cards[2].try(set_attr) != game_cards[0].try(set_attr)
-          set = false
-          break
-        end
+      if values.uniq.length == 2
+        return false
       end
     end
 
-    set
+    true
   end
 
   def handle_result(result:, game_cards: [], current_account:)
